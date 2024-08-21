@@ -17,12 +17,12 @@ function App() {
       }}
     >
       {/* <ListOfAllUsers users={users} /> */}
-      <CreateUser />
+      {/* <CreateUser /> */}
       {/* <CreateCourse /> */}
-      {/* <Header /> */}
-      {/* <Home /> */}
+      <Header />
+      <Home />
       {/* <Login /> */}
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
