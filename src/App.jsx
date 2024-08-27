@@ -1,11 +1,10 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header/Header.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login/Login.jsx";
-import "./index.css";
-import Footer from "./components/Footer/Footer.jsx";
-import ListOfAllUsers from "./components/User/ListOfAllUsers/ListOfAllUsers.jsx";
-import CreateUser from "./components/User/CreateUser/CreateUser.jsx";
-import { users } from "../data.js";
+import User from "./pages/User/User.jsx";
+import CoursesPage from "./pages/Courses/CoursesPage.jsx";
 
 function App() {
   return (
@@ -16,15 +15,26 @@ function App() {
         msOverflowStyle: "none", // Internet Explorer and Edge
       }}
     >
-      {/* <ListOfAllUsers users={users} /> */}
-      {/* <CreateUser /> */}
-      {/* <CreateCourse /> */}
-      <Header />
-      <Home />
-      {/* <Login /> */}
-      <Footer />
+      {<Header />}
+      <div style={{ marginTop: "6rem" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/users" element={<User />} />
+          <Route path="/courses" element={<CoursesPage />} />
+          {/* <Route path="/my-learnings" element={<MyLearnings />} /> */}
+        </Routes>
+      </div>
     </div>
   );
 }
 
-export default App;
+function AppWrapper() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}
+
+export default AppWrapper;

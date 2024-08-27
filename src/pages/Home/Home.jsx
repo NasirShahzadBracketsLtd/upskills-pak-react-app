@@ -2,10 +2,11 @@ import React from "react";
 import Course from "../../components/Course/Course";
 import { TypeAnimation } from "react-type-animation";
 import { courses } from "../../../data";
+import Footer from "../../components/Footer/Footer";
 
 function Home() {
   return (
-    <main className="h-full w-full pt-24">
+    <main className="h-full w-full">
       {/** ======================= Main Cover Section ======================= */}
       <section
         id="home"
@@ -45,14 +46,14 @@ function Home() {
       {/** ======================= Courses Section ======================= */}
       <section
         id="courses"
-        className="min-h-screen bg-slate-100 px-20 py-16 pt-[6rem]" // Adding padding-top to avoid header overlap
+        className="min-h-screen bg-slate-100 px-48 py-16 pt-[6rem]" // Adding padding-top to avoid header overlap
       >
         <header className="flex flex-col items-center mb-12">
           <h2 className="text-5xl font-bold">Courses</h2>
           <p className="text-lg text-blue-500 font-thin">Join to Learn and Go for Earn</p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {courses.map((course, index) => (
             <Course key={index} course={course} />
           ))}
@@ -62,11 +63,11 @@ function Home() {
       {/** ======================= Services Section ======================= */}
       <section
         id="services"
-        className="min-h-[35rem] bg-white py-16 pt-[6rem]" // Adding padding-top to avoid header overlap
+        className="min-h-[35rem] bg-white py-16 px-48 pt-[6rem]" // Adding padding-top to avoid header overlap
       >
         <header className="flex flex-col items-center mb-12">
           <h2 className="text-5xl font-bold">Services</h2>
-          <p className="text-lg text-blue-500 font-thin">Join to Learn and Go for Earn</p>
+          <p className="text-lg text-blue-500 font-thin">Our Services</p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-10">
@@ -104,6 +105,8 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }
