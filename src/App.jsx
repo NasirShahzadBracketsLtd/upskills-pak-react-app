@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login/Login.jsx";
 import User from "./pages/User/User.jsx";
 import CoursesPage from "./pages/Courses/CoursesPage.jsx";
+import CourseDetails from "./components/Course/CourseDetails.jsx";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/users" element={<User />} />
           <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/courses/:courseId" element={<CourseDetails />} />
           {/* <Route path="/my-learnings" element={<MyLearnings />} /> */}
         </Routes>
       </div>

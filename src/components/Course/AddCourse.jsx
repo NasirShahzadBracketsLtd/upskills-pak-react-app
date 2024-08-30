@@ -23,7 +23,6 @@ const CreateCourse = ({ onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic
-    // onClose(); // This line seems unnecessary if you're not passing the `onClose` prop
   };
 
   const handleCancel = () => {
@@ -31,90 +30,97 @@ const CreateCourse = ({ onClose }) => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-4 text-center">Create Course</h2>
+    <div className="bg-white shadow-lg rounded-lg p-8 mx-36 mt-6">
+      <h2 className="text-2xl font-bold mb-6 text-center">Create Course</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Course Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Cover Image URL"
+            value={coverImage}
+            onChange={(e) => setCoverImage(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Intro Video URL"
+            value={introVideoUrl}
+            onChange={(e) => setIntroVideoUrl(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <textarea
+            placeholder="Course Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows="4"
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="number"
+            placeholder="Price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-        <input
-          type="text"
-          placeholder="Course Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full mb-4 p-2 border rounded"
-        />
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold mb-2">Lectures</h3>
+          {lectures.map((lecture, index) => (
+            <div key={index} className="mb-4">
+              <input
+                type="text"
+                placeholder="Lecture Title"
+                value={lecture.title}
+                onChange={(e) => handleLectureChange(index, "title", e.target.value)}
+                className="w-full mb-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="text"
+                placeholder="Lecture Link"
+                value={lecture.link}
+                onChange={(e) => handleLectureChange(index, "link", e.target.value)}
+                className="w-full mb-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {index < lectures.length - 1 && <hr className="my-4" />}
+            </div>
+          ))}
 
-        <input
-          type="text"
-          placeholder="Cover Image URL"
-          value={coverImage}
-          onChange={(e) => setCoverImage(e.target.value)}
-          className="w-full mb-4 p-2 border rounded"
-        />
-
-        <input
-          type="text"
-          placeholder="Intro Video URL"
-          value={introVideoUrl}
-          onChange={(e) => setIntroVideoUrl(e.target.value)}
-          className="w-full mb-4 p-2 border rounded"
-        />
-
-        <textarea
-          placeholder="Course Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full mb-4 p-2 border rounded"
-          rows="4"
-        />
-
-        <input
-          type="number"
-          placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          className="w-full mb-6 p-2 border rounded"
-        />
-
-        <h3 className="text-lg font-semibold mb-2">Lectures</h3>
-        {lectures.map((lecture, index) => (
-          <div key={index} className="mb-4">
-            <input
-              type="text"
-              placeholder="Lecture Title"
-              value={lecture.title}
-              onChange={(e) => handleLectureChange(index, "title", e.target.value)}
-              className="w-full mb-2 p-2 border rounded"
-            />
-            <input
-              type="text"
-              placeholder="Lecture Link"
-              value={lecture.link}
-              onChange={(e) => handleLectureChange(index, "link", e.target.value)}
-              className="w-full mb-2 p-2 border rounded"
-            />
-            {index < lectures.length - 1 && <hr className="my-4" />}
-          </div>
-        ))}
-
-        <button
-          type="button"
-          onClick={handleAddLecture}
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full mb-4"
-        >
-          Add Lecture
-        </button>
-
-        <div className="flex justify-end space-x-4 mt-6">
           <button
             type="button"
-            onClick={onClose}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-full"
+            onClick={handleAddLecture}
+            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full mb-4"
+          >
+            Add Lecture
+          </button>
+        </div>
+
+        <div className="flex justify-end mt-6">
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="mr-4 bg-red-500 text-white hover:bg-red-500 px-6 py-2 rounded-full focus:outline-none"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-full"
+            className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-2 rounded-full focus:outline-none"
           >
             Create
           </button>

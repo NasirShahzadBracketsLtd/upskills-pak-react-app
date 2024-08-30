@@ -1,13 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Course from "../../components/Course/Course";
 import AddCourse from "../../components/Course/AddCourse";
 import { courses } from "../../../data";
 
 function CoursesPage() {
   const [isAddingCourse, setIsAddingCourse] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddCourseClick = () => {
     setIsAddingCourse(true);
+  };
+
+  const handleCourseClick = (courseId) => {
+    navigate(`/courses/${courseId}`);
   };
 
   return (
@@ -30,7 +36,11 @@ function CoursesPage() {
           ) : (
             <div className="grid grid-cols-3 gap-12">
               {courses.map((course, index) => (
-                <Course key={index} course={course} />
+                <Course
+                  key={index}
+                  course={course}
+                  onClick={() => handleCourseClick(course.id)} // Pass courseId to navigate
+                />
               ))}
             </div>
           )}
