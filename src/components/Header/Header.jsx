@@ -1,33 +1,78 @@
 import React from "react";
-const color = "#000099";
-function Header() {
+import { Link } from "react-router-dom";
+
+function Header({ isLoggedIn, isAdmin }) {
+  isLoggedIn = true;
+  isAdmin = true;
   return (
-    <div className="flex items-center bg-white h-[6rem] w-full justify-between px-24 fixed top-0">
-      {/** ------------------------ Logo ------------------------ */}
-      <div className="flex justify-start w-1/4 ">
-        <img
-          className="w-18 h-24"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcm-dWwcZFlFnyd2RWI-_nPQp21tI2_4IbDQ&s"
-          alt=""
-        />
-      </div>
+    <header className="bg-blue-900 h-[6rem] text-white w-full fixed top-0 shadow-md z-10 ">
+      <nav className="flex items-center justify-between px-24 h-full">
+        {/* Logo */}
+        <section className="w-1/5 flex justify-start">
+          <Link to="/">
+            <img
+              className="w-18 h-24 p-4 rounded-full "
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcm-dWwcZFlFnyd2RWI-_nPQp21tI2_4IbDQ&s"
+              alt="Website Logo"
+            />
+          </Link>
+        </section>
 
-      {/** ------------------------ Menu ------------------------ */}
-      <div className="flex gap-24 justify-start w-1/3 ">
-        <div className="flex gap-6 text-2xl font-semibold ">
-          <span className="hover:cursor-pointer hover:font-semibold hover:text-blue-700">Home</span>
-          <span className="hover:cursor-pointer hover:font-semibold hover:text-blue-700">Courses</span>
-          <span className="hover:cursor-pointer hover:font-semibold hover:text-blue-700">Contact Us</span>
-        </div>
-      </div>
+        {/* Menu */}
+        <ul className="flex gap-8 w-3/5">
+          <li className="text-xl font-semibold">
+            <Link to="/" className="hover:font-semibold hover:text-gray-400 ">
+              Home
+            </Link>
+          </li>
+          {!isLoggedIn && (
+            <>
+              <li className="text-xl font-semibold">
+                <a href="#courses" className="hover:font-semibold hover:text-blue-700">
+                  Courses
+                </a>
+              </li>
+              <li className="text-xl font-semibold">
+                <a href="#services" className="hover:font-semibold hover:text-blue-700">
+                  Services
+                </a>
+              </li>
+            </>
+          )}
+          {isLoggedIn && isAdmin && (
+            <>
+              <li className="text-xl font-semibold">
+                <Link to="/users" className="hover:font-semibold hover:text-blue-700">
+                  User
+                </Link>
+              </li>
+              <li className="text-xl font-semibold">
+                <a href="/courses" className="hover:font-semibold hover:text-blue-700">
+                  Courses
+                </a>
+              </li>
+            </>
+          )}
+          {isLoggedIn && !isAdmin && (
+            <li className="text-xl font-semibold">
+              <Link to="/my-learnings" className="hover:font-semibold hover:text-blue-700">
+                My Learnings
+              </Link>
+            </li>
+          )}
+        </ul>
 
-      {/** ------------------------ Login Button ------------------------ */}
-      <div className="flex justify-end w-1/3 ">
-        <button className="px-4 py-2 border w-[7rem] text-xl border-blue-500 text-blue-500 rounded-full hover:bg-blue-500 hover:text-white">
-          Login
-        </button>
-      </div>
-    </div>
+        {/* Login/Logout Button */}
+        <section className="w-1/5 flex justify-end">
+          <Link
+            to={isLoggedIn ? "/" : "/login"}
+            className="px-4 py-2 flex items-center justify-center border w-[7rem] text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
+          >
+            {isLoggedIn ? "Logout" : "Login"}
+          </Link>
+        </section>
+      </nav>
+    </header>
   );
 }
 

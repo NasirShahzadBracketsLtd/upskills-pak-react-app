@@ -27,7 +27,7 @@ function Footer() {
         </div>
         <div className="flex items-center gap-2">
           <h1 className="text-white font-bold">Email:</h1>
-          <span className="text-blue-500 font-semibold pl-4">upskill@gmial.com</span>
+          <span className="text-blue-500 font-semibold pl-4">upskillspakistan@gmail.com</span>
         </div>
         <div className="flex items-center gap-2">
           <h1 className="text-white font-bold">Address:</h1>
