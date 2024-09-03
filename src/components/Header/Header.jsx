@@ -1,9 +1,33 @@
+import axios from "axios";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../utils/constants";
 
 function Header({ isLoggedIn, isAdmin }) {
-  isLoggedIn = true;
-  isAdmin = true;
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.post(
+        `${API_BASE_URL}/auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      localStorage.removeItem("token");
+
+      navigate("/login");
+    } catch (error) {
+      console.log("Error while logged out", error);
+    }
+  };
+
   return (
     <header className="bg-blue-900 h-[6rem] text-white w-full fixed top-0 shadow-md z-10 ">
       <nav className="flex items-center justify-between px-24 h-full">
@@ -64,12 +88,21 @@ function Header({ isLoggedIn, isAdmin }) {
 
         {/* Login/Logout Button */}
         <section className="w-1/5 flex justify-end">
-          <Link
-            to={isLoggedIn ? "/" : "/login"}
-            className="px-4 py-2 flex items-center justify-center border w-[7rem] text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
-          >
-            {isLoggedIn ? "Logout" : "Login"}
-          </Link>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 flex items-center justify-center border w-[7rem] text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="px-4 py-2 flex items-center justify-center border w-[7rem] text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
+            >
+              Login
+            </Link>
+          )}
         </section>
       </nav>
     </header>

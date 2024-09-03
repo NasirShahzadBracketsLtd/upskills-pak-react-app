@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import Course from "../../components/Course/Course";
 import AddCourse from "../../components/Course/AddCourse";
 import { courses } from "../../../data";
@@ -19,7 +20,9 @@ function CoursesPage() {
   return (
     <div>
       <section id="courses" className="min-h-screen bg-slate-200 py-6 px-48">
-        <div className="items-end flex justify-end px-12">
+        {/** ============================= Add Course Button ============================= */}
+
+        <div className="items-end flex justify-end px-6">
           {!isAddingCourse && (
             <button
               onClick={handleAddCourseClick}
@@ -29,6 +32,8 @@ function CoursesPage() {
             </button>
           )}
         </div>
+
+        {/** ============================= Show All Courses ============================= */}
 
         <div className="px-12 pt-6">
           {isAddingCourse ? (
