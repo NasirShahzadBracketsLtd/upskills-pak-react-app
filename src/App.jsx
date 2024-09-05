@@ -19,8 +19,6 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    // const role = localStorage.getItem("role");
-
     if (token) {
       const fetchUserRole = async () => {
         try {
@@ -31,9 +29,10 @@ function App() {
           });
 
           if ((roleResponse.status = 200)) {
-            const { role } = roleResponse.data;
+            const role = roleResponse.data.role;
 
             setUser({ isLoggedIn: true, isAdmin: role == "ADMIN" });
+            setHasCheckedLogin(true); // Set hasCheckedLogin to true
           }
         } catch (error) {
           console.log("Error while getting user role", error);
