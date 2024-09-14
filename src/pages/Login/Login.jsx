@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { FaHome } from "react-icons/fa";
+
 import { API_BASE_URL } from "../../utils/constants";
 
 function Login() {
@@ -79,6 +81,7 @@ function Login() {
             }}
             onKeyDown={handleKeyDown} // Listen for "Enter" key press
             className="h-12 w-[400px] mt-12 border border-solid px-4 outline-none border-gray-300 bg-zinc-100 border-t-0 border-l-0 border-r-0"
+            required
           />
           {emailError && <p className="text-red-500 text-xs">{emailError}</p>} {/* Show email error */}
           {/* Password Input */}
@@ -101,7 +104,12 @@ function Login() {
           >
             Login
           </button>
-          <h1 className="text-md text-blue-600 cursor-pointer">Forgot Password?</h1>
+          {/* <h1 className="text-md text-blue-600 cursor-pointer">Forgot Password?</h1> */}
+          {/** Back to Website */}
+          <div className="flex justify-center items-center gap-2 mt-32 cursor-pointer" onClick={() => navigate(`/`)}>
+            <h1 className="text-red-600">Back to Website</h1>
+            <FaHome className="text-lg text-red-600 cursor-pointer" />
+          </div>
         </div>
       </div>
     </>

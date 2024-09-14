@@ -8,30 +8,22 @@ const Header = ({ isLoggedIn, isAdmin }) => {
 
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem(`token`);
 
-      await axios.post(
-        `${API_BASE_URL}/auth/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`${API_BASE_URL}/auth/logout`, {}, { headers: { Authorization: `Bearer ${token}` } });
 
-      localStorage.removeItem("token");
+      localStorage.removeItem(`token`);
 
-      navigate("/login");
+      navigate(`/login`);
     } catch (error) {
-      console.log("Error while logged out", error);
+      console.log(`Error while logged out`, error);
     }
   };
 
   return (
     <header className="bg-blue-900 h-[6rem] text-white w-full fixed top-0 shadow-md z-10 ">
       <nav className="flex items-center justify-between px-24 h-full">
-        {/* Logo */}
+        {/** ---------------------- Logo ---------------------- */}
         <section className="w-1/5 flex justify-start">
           <Link to="/">
             <img
@@ -42,13 +34,15 @@ const Header = ({ isLoggedIn, isAdmin }) => {
           </Link>
         </section>
 
-        {/* Menu */}
+        {/** ---------------------- Menu ---------------------- */}
         <ul className="flex gap-8 w-3/5">
           <li className="text-xl font-semibold">
             <Link to="/" className="hover:font-semibold hover:text-gray-400 ">
               Home
             </Link>
           </li>
+
+          {/** ---------------------- Public View when not logged in ---------------------- */}
           {!isLoggedIn && (
             <>
               <li className="text-xl font-semibold">
@@ -63,6 +57,8 @@ const Header = ({ isLoggedIn, isAdmin }) => {
               </li>
             </>
           )}
+
+          {/** ---------------------- Admin Login ---------------------- */}
           {isLoggedIn && isAdmin && (
             <>
               <li className="text-xl font-semibold">
@@ -77,6 +73,8 @@ const Header = ({ isLoggedIn, isAdmin }) => {
               </li>
             </>
           )}
+
+          {/** ---------------------- Student Login ---------------------- */}
           {isLoggedIn && !isAdmin && (
             <li className="text-xl font-semibold">
               <Link to="/my-learnings" className="hover:font-semibold hover:text-blue-700">
@@ -86,7 +84,7 @@ const Header = ({ isLoggedIn, isAdmin }) => {
           )}
         </ul>
 
-        {/* Login/Logout Button */}
+        {/** ---------------------- Login/Logout Button ---------------------- */}
         <section className="w-1/5 flex justify-end">
           {isLoggedIn ? (
             <button

@@ -126,38 +126,65 @@ export const courses = [
     _id: 1,
     title: "Amazon",
     price: "12000",
-    image:
+    coverImage:
       "https://res.cloudinary.com/zenbusiness/image/upload/v1670445040/logaster/logaster-2020-03-amazon-gif-logo.jpg",
   },
   {
     _id: 2,
     title: "Shopify",
     price: "19000",
-    image: "https://img.supdropshipping.com/wp-content/uploads/2023/10/What-Is-Shopify-2.jpg",
+    coverImage: "https://img.supdropshipping.com/wp-content/uploads/2023/10/What-Is-Shopify-2.jpg",
   },
   {
     _id: 3,
     title: "Fiverr",
     price: "14000",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1wiMzUlVk9c5moWGd5qVJlEIewU1xk51DJw&s",
+    coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1wiMzUlVk9c5moWGd5qVJlEIewU1xk51DJw&s",
   },
   {
     _id: 4,
     title: "Trading",
     price: "18000",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTto6IjeA7HhikyRuKkq0S3vSmK0Tp4oXrrHg&s",
+    coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTto6IjeA7HhikyRuKkq0S3vSmK0Tp4oXrrHg&s",
   },
   {
     _id: 5,
     title: "Freelancing",
     price: "19000",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgITwdVrnn0EcVsY3sFhDF11DCi_xc26y4jQ&s",
+    coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgITwdVrnn0EcVsY3sFhDF11DCi_xc26y4jQ&s",
   },
   {
     _id: 6,
     title: "Fiverr GiG",
     price: "9000",
-    image:
+    coverImage:
       "https://www.meersworld.net/wp-content/uploads/How-to-sign-up-for-Fiverr-Seller-account-and-create-your-first-Gig.webp",
   },
+];
+
+export const courses2 = [
+  {
+    id: "1",
+    title: "React Basics",
+    description:
+      "Learn the fundamentals of React, including components, state, and props. Learn the fundamentals of React, including components, state, and props. Learn the fundamentals and props.Learn the fundamentals of React, including components, state, and props.",
+    introVideoUrl: "https://www.youtube.com/watch?v=BHy9kXR1n-c",
+    lectures: [
+      { title: "Introduction to React", link: "https://www.youtube.com/watch?v=KUpwupYj_tY" },
+      { title: "React Components", link: "https://www.youtube.com/watch?v=8sLS2knUa6Y" },
+      { title: "State and Props", link: "https://www.youtube.com/watch?v=LK7-_dgAVQE" },
+    ],
+  },
+  {
+    id: "2",
+    title: "Advanced React",
+    description: "Dive deeper into React with hooks, context, and advanced patterns.",
+    introVideoUrl: "https://www.youtube.com/watch?v=example2",
+    lectures: [
+      { title: "Hooks in React", link: "https://www.youtube.com/watch?v=lecture4" },
+      { title: "Context API", link: "https://www.youtube.com/watch?v=lecture5" },
+      { title: "React Patterns", link: "https://www.youtube.com/watch?v=lecture6" },
+    ],
+  },
+  // More courses...
 ];
