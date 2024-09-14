@@ -6,31 +6,11 @@ import { courses } from "../../../data";
 import { API_BASE_URL } from "../../utils/constants";
 import ListUsers from "../../components/User/ListUsers";
 import CreateUser from "../../components/User/CreateUser";
-import SingleUser from "../../components/User/SingleUser";
 
 function User() {
   const [users, setUsers] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [isAddingUser, setIsAddingUser] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
 
-  const handleAddUser = () => {
-    setIsAddingUser(true);
-    setSelectedUser(null); // Reset selected user when adding a new user
-  };
-
-  const handleCancel = () => {
-    setIsAddingUser(false);
-  };
-
-  const handleSelectUser = (user) => {
-    setSelectedUser(user);
-    setIsAddingUser(false); // Hide the add user form if any user is selected
-  };
-
-  const handleCloseUserView = () => {
-    setSelectedUser(null);
-  };
+  const navigate = useNavigate();
 
   /**---------------------------------------------------------------------
         * Get Token from local storage and set Headers (Bearer Token)
@@ -42,70 +22,65 @@ function User() {
 
   const headers = { headers: { Authorization: `Bearer ${token}` } };
 
-  const navigate = useNavigate();
-
   /**---------------------------------------------------------------------
                         * Fet Users & Courses
    ---------------------------------------------------------------------*/
   useEffect(() => {
-    const fetchUsersAndCourses = async () => {
+    const fetchUsersList = async () => {
       try {
         const usersResponse = await axios.get(`${API_BASE_URL}/users`, headers);
         setUsers(usersResponse.data);
-
-        const coursesResponse = await axios.get(`${API_BASE_URL}/courses`, headers);
-        setCourses(coursesResponse.data);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchUsersAndCourses();
-  }, [navigate]);
+    fetchUsersList();
+  }, []);
 
   /**---------------------------------------------------------------------
                           * Handlee Create User
    ---------------------------------------------------------------------*/
-  const handleCreateOrUpdateUser = async (formData) => {
-    try {
-      if (selectedUser) {
-        console.log("in selected user ==========================");
+  // const handleCreateOrUpdateUser = async (formData, selectedUser) => {
+  //   try {
+  //     if (selectedUser) {
+  //       console.log("in selected user ==========================");
 
-        await axios.patch(`${API_BASE_URL}/users/${selectedUser.id}`, formData, headers);
-      } else {
-        console.log("in create user ==========================");
-        await axios.post(`${API_BASE_URL}/users`, formData, headers);
-        setIsAddingUser(false); // Close form after creation
-      }
+  //       await axios.patch(
+  //         `${API_BASE_URL}/users/${selectedUser.id}`,
+  //         formData,
+  //         headers
+  //       );
+  //     } else {
+  //       console.log("in create user ==========================");
+  //       await axios.post(`${API_BASE_URL}/users`, formData, headers);
+  //       setIsAddingUser(false); // Close form after creation
+  //     }
 
-      const userResponse = await axios.get(`${API_BASE_URL}/users`, headers);
-      setUsers(userResponse.data);
-    } catch (error) {
-      console.error(`Error creating user:`, error.response ? error.response.data : error.message);
-    }
-  };
+  //     const userResponse = await axios.get(`${API_BASE_URL}/users`, headers);
+  //     setUsers(userResponse.data);
+  //   } catch (error) {
+  //     console.error(
+  //       `Error creating user:`,
+  //       error.response ? error.response.data : error.message
+  //     );
+  //   }
+  // };
 
   return (
     <div className="bg-gray-300 py-6 h-screen">
       <div className="flex justify-between items-center px-36 pb-6">
         <h1 className="text-2xl font-semibold">Users</h1>
-        {!isAddingUser && (
-          <button onClick={handleAddUser} className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 rounded-full">
-            Add User
-          </button>
-        )}
+
+        <button
+          onClick={() => navigate("/users/create")}
+          className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 rounded-full"
+        >
+          Add User
+        </button>
       </div>
 
       <div>
-        {isAddingUser && (
-          <CreateUser
-            onCancel={handleCancel}
-            courses={courses}
-            // onSubmit={handleCreateOrUpdateUser}
-            // user={selectedUser}
-          />
-        )}
-        {!isAddingUser && selectedUser && <SingleUser user={selectedUser} onClose={handleCloseUserView} />}
-        {!isAddingUser && !selectedUser && <ListUsers users={users} onSelectUser={handleSelectUser} />}
+        <ListUsers users={users} />
       </div>
     </div>
   );

@@ -10,9 +10,14 @@ const Header = ({ isLoggedIn, isAdmin }) => {
     try {
       const token = localStorage.getItem(`token`);
 
-      await axios.post(`${API_BASE_URL}/auth/logout`, {}, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.post(
+        `${API_BASE_URL}/auth/logout`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       localStorage.removeItem(`token`);
+      localStorage.removeItem("user");
 
       navigate(`/login`);
     } catch (error) {
@@ -34,7 +39,6 @@ const Header = ({ isLoggedIn, isAdmin }) => {
           </Link>
         </section>
 
-        {/** ---------------------- Menu ---------------------- */}
         <ul className="flex gap-8 w-3/5">
           <li className="text-xl font-semibold">
             <Link to="/" className="hover:font-semibold hover:text-gray-400 ">
@@ -42,42 +46,53 @@ const Header = ({ isLoggedIn, isAdmin }) => {
             </Link>
           </li>
 
-          {/** ---------------------- Public View when not logged in ---------------------- */}
           {!isLoggedIn && (
             <>
               <li className="text-xl font-semibold">
-                <a href="#courses" className="hover:font-semibold hover:text-blue-700">
+                <a
+                  href="#courses"
+                  className="hover:font-semibold hover:text-blue-700"
+                >
                   Courses
                 </a>
               </li>
               <li className="text-xl font-semibold">
-                <a href="#services" className="hover:font-semibold hover:text-blue-700">
+                <a
+                  href="#services"
+                  className="hover:font-semibold hover:text-blue-700"
+                >
                   Services
                 </a>
               </li>
             </>
           )}
-
-          {/** ---------------------- Admin Login ---------------------- */}
           {isLoggedIn && isAdmin && (
             <>
               <li className="text-xl font-semibold">
-                <Link to="/users" className="hover:font-semibold hover:text-blue-700">
+                <Link
+                  to="/users"
+                  className="hover:font-semibold hover:text-blue-700"
+                >
                   User
                 </Link>
               </li>
               <li className="text-xl font-semibold">
-                <a href="/courses" className="hover:font-semibold hover:text-blue-700">
+                <a
+                  href="/courses"
+                  className="hover:font-semibold hover:text-blue-700"
+                >
                   Courses
                 </a>
               </li>
             </>
           )}
 
-          {/** ---------------------- Student Login ---------------------- */}
           {isLoggedIn && !isAdmin && (
             <li className="text-xl font-semibold">
-              <Link to="/my-learnings" className="hover:font-semibold hover:text-blue-700">
+              <Link
+                to="/my-learnings"
+                className="hover:font-semibold hover:text-blue-700"
+              >
                 My Learnings
               </Link>
             </li>

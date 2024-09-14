@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaHome } from "react-icons/fa";
 
 import { API_BASE_URL } from "../../utils/constants";
+import { USER_ROLE } from "../../utils/enum";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,29 @@ function Login() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
+
+  const fetchUserRole = async (token) => {
+    try {
+      const roleResponse = await axios.get(`${API_BASE_URL}/users/user/role`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (roleResponse.status == 200) {
+        const role = roleResponse.data.role;
+        localStorage.setItem(
+          `user`,
+          JSON.stringify({
+            isLoggedIn: true,
+            isAdmin: role === USER_ROLE.ADMIN,
+          })
+        );
+        toast.success(`Login successful!`);
+        navigate(`/`);
+      }
+    } catch (error) {
+      console.log("Error while getting user role", error);
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -38,12 +62,14 @@ function Login() {
     if (!valid) return;
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+        email,
+        password,
+      });
 
       if (response.data.token) {
         localStorage.setItem(`token`, response.data.token);
-        toast.success(`Login successful!`);
-        navigate(`/`);
+        await fetchUserRole(response.data.token);
       }
     } catch (error) {
       console.log(error);
@@ -64,55 +90,60 @@ function Login() {
   };
 
   return (
-    <>
-      <div className="px-[550px] py-12 h-screen items-center bg-blue-900">
-        <ToastContainer /> {/* Toast container to display toasts */}
-        <div className="flex flex-col gap-2 h-full bg-zinc-100 rounded-xl text-center items-center py-12">
-          <h1 className="text-lg font-bold text-blue-600">Welcome to</h1>
-          <h1 className="text-4xl font-bold text-blue-600">UpSkills Pakistan</h1>
-          {/* Email Input */}
-          <input
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              if (emailError) setEmailError(""); // Clear error when typing starts
-            }}
-            onKeyDown={handleKeyDown} // Listen for "Enter" key press
-            className="h-12 w-[400px] mt-12 border border-solid px-4 outline-none border-gray-300 bg-zinc-100 border-t-0 border-l-0 border-r-0"
-            required
-          />
-          {emailError && <p className="text-red-500 text-xs">{emailError}</p>} {/* Show email error */}
-          {/* Password Input */}
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              if (passwordError) setPasswordError(""); // Clear error when typing starts
-            }}
-            onKeyDown={handleKeyDown} // Listen for "Enter" key press
-            className="h-12 w-[400px] border border-solid px-4 outline-none border-gray-300 bg-zinc-100 border-t-0 border-l-0 border-r-0 "
-          />
-          {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>} {/* Show password error */}
-          {/* Login Button */}
-          <button
-            onClick={handleLogin}
-            className="h-12 w-[400px] rounded-md px-4 mt-3 bg-blue-600 text-white font-semibold text-lg hover:bg-blue-800"
-          >
-            Login
-          </button>
-          {/* <h1 className="text-md text-blue-600 cursor-pointer">Forgot Password?</h1> */}
-          {/** Back to Website */}
-          <div className="flex justify-center items-center gap-2 mt-32 cursor-pointer" onClick={() => navigate(`/`)}>
-            <h1 className="text-red-600">Back to Website</h1>
-            <FaHome className="text-lg text-red-600 cursor-pointer" />
-          </div>
+    <div className="py-12 h-screen flex justify-center items-center bg-blue-900">
+      <ToastContainer /> {/* Toast container to display toasts */}
+      <div className="w-96 p-5 flex flex-col gap-2 h-full bg-zinc-100 rounded-xl text-center items-center py-12">
+        <h1 className="text-lg font-bold text-blue-600">Welcome to</h1>
+        <h1 className="text-4xl font-bold text-blue-600">UpSkills Pakistan</h1>
+        {/* Email Input */}
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (emailError) setEmailError(""); // Clear error when typing starts
+          }}
+          onKeyDown={handleKeyDown} // Listen for "Enter" key press
+          className="h-12 w-full mt-12 border border-solid px-4 outline-none border-gray-300 bg-zinc-100 border-t-0 border-l-0 border-r-0"
+          required
+        />
+        {emailError && <p className="text-red-500 text-xs">{emailError}</p>}{" "}
+        {/* Show email error */}
+        {/* Password Input */}
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            if (passwordError) setPasswordError(""); // Clear error when typing starts
+          }}
+          onKeyDown={handleKeyDown} // Listen for "Enter" key press
+          className="h-12 w-full border border-solid px-4 outline-none border-gray-300 bg-zinc-100 border-t-0 border-l-0 border-r-0 "
+        />
+        {passwordError && (
+          <p className="text-red-500 text-xs">{passwordError}</p>
+        )}{" "}
+        {/* Show password error */}
+        {/* Login Button */}
+        <button
+          onClick={handleLogin}
+          className="h-12 w-full rounded-md px-4 mt-3 bg-blue-600 text-white font-semibold text-lg hover:bg-blue-800"
+        >
+          Login
+        </button>
+        {/* <h1 className="text-md text-blue-600 cursor-pointer">Forgot Password?</h1> */}
+        {/** Back to Website */}
+        <div
+          className="flex justify-center items-center gap-2 mt-32 cursor-pointer"
+          onClick={() => navigate(`/`)}
+        >
+          <h1 className="text-red-600">Back to Website</h1>
+          <FaHome className="text-lg text-red-600 cursor-pointer" />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

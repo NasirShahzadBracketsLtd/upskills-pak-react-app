@@ -1,7 +1,9 @@
 import React from "react";
 import { USER_ROLE, USER_STATUS } from "../../utils/enum";
+import { useNavigate } from "react-router-dom";
 
-const ListUsers = ({ users, onSelectUser }) => {
+const ListUsers = ({ users }) => {
+  const navigate = useNavigate()
   return (
     <div className="overflow-x-auto px-36">
       <table className="min-w-full bg-white border border-gray-300 shadow-md">
@@ -22,7 +24,7 @@ const ListUsers = ({ users, onSelectUser }) => {
             <tr
               key={index}
               className="hover:bg-gray-100 transition duration-200 ease-in-out text-md cursor-pointer"
-              onClick={() => onSelectUser(user)}
+              onClick={() => navigate(`/users/${user._id}`)}
             >
               <td className="py-2 px-4 border-b border-gray-300">{index + 1}</td>
               <td className="py-2 px-4 border-b border-gray-300">{`${user.firstName} ${user.lastName}`}</td>
