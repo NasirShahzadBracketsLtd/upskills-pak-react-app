@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header/Header.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login/Login.jsx";
 import User from "./pages/User/User.jsx";
 import CoursesPage from "./pages/Courses/CoursesPage.jsx";
 import CourseDetails from "./components/Course/CourseDetails.jsx";
-import { API_BASE_URL } from "./utils/constants.js";
-import { USER_ROLE } from "./utils/enum.js";
 
-import axios from "axios";
 import CreateUser from "./components/User/CreateUser.jsx";
 import CreateCourse from "./components/Course/AddCourse.jsx";
 import SingleUser from "./components/User/SingleUser.jsx";
@@ -38,24 +30,25 @@ function App() {
       }}
     >
       <ToastContainer />
-      {shouldShowHeader && (
-        <Header isLoggedIn={user?.isLoggedIn} isAdmin={user?.isAdmin} />
-      )}
+      {shouldShowHeader && <Header isLoggedIn={user?.isLoggedIn} isAdmin={user?.isAdmin} />}
       <div style={{ marginTop: shouldShowHeader ? "6rem" : "0" }}>
         <Routes>
           <Route path="/" element={<Home />} />
+
+          {/** --------------------- Auth Routes ---------------------  */}
           <Route path="/login" element={<Login />} />
+
+          {/** --------------------- User Routes ---------------------  */}
           <Route path="/users" element={<User />} />
           <Route path="/users/create" element={<CreateUser />} />
           <Route path="/users/update/:userId" element={<UpdateUser />} />
           <Route path="/users/:userId" element={<SingleUser />} />
 
+          {/** --------------------- Course Routes ---------------------  */}
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:courseId" element={<CourseDetails />} />
           <Route path="/courses/create-course" element={<CreateCourse />} />
           <Route path="/courses/update-course/:id" element={<CreateCourse />} />
-
-          {/* <Route path="/my-learnings" element={<MyLearnings />} /> */}
         </Routes>
       </div>
     </div>

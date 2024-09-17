@@ -4,20 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../utils/constants";
 
 const Header = ({ isLoggedIn, isAdmin }) => {
+  console.log("isLoggedIn", isLoggedIn);
+  console.log("isAdmin", isAdmin);
   const navigate = useNavigate();
+
+  const token = localStorage.getItem(`token`);
 
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem(`token`);
-
-      await axios.post(
-        `${API_BASE_URL}/auth/logout`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
+      await axios.post(`${API_BASE_URL}/auth/logout`, {}, { headers: { Authorization: `Bearer ${token}` } });
+      console.log("token", token);
       localStorage.removeItem(`token`);
-      localStorage.removeItem("user");
+      localStorage.removeItem(`user`);
 
       navigate(`/login`);
     } catch (error) {
@@ -49,18 +47,12 @@ const Header = ({ isLoggedIn, isAdmin }) => {
           {!isLoggedIn && (
             <>
               <li className="text-xl font-semibold">
-                <a
-                  href="#courses"
-                  className="hover:font-semibold hover:text-blue-700"
-                >
+                <a href="#courses" className="hover:font-semibold hover:text-blue-700">
                   Courses
                 </a>
               </li>
               <li className="text-xl font-semibold">
-                <a
-                  href="#services"
-                  className="hover:font-semibold hover:text-blue-700"
-                >
+                <a href="#services" className="hover:font-semibold hover:text-blue-700">
                   Services
                 </a>
               </li>
@@ -69,18 +61,12 @@ const Header = ({ isLoggedIn, isAdmin }) => {
           {isLoggedIn && isAdmin && (
             <>
               <li className="text-xl font-semibold">
-                <Link
-                  to="/users"
-                  className="hover:font-semibold hover:text-blue-700"
-                >
+                <Link to="/users" className="hover:font-semibold hover:text-blue-700">
                   User
                 </Link>
               </li>
               <li className="text-xl font-semibold">
-                <a
-                  href="/courses"
-                  className="hover:font-semibold hover:text-blue-700"
-                >
+                <a href="/courses" className="hover:font-semibold hover:text-blue-700">
                   Courses
                 </a>
               </li>
@@ -89,10 +75,7 @@ const Header = ({ isLoggedIn, isAdmin }) => {
 
           {isLoggedIn && !isAdmin && (
             <li className="text-xl font-semibold">
-              <Link
-                to="/my-learnings"
-                className="hover:font-semibold hover:text-blue-700"
-              >
+              <Link to="/my-learnings" className="hover:font-semibold hover:text-blue-700">
                 My Learnings
               </Link>
             </li>

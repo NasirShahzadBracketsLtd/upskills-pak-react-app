@@ -16,6 +16,8 @@ function Login() {
   const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+
   const fetchUserRole = async (token) => {
     try {
       const roleResponse = await axios.get(`${API_BASE_URL}/users/user/role`, {
@@ -108,8 +110,7 @@ function Login() {
           className="h-12 w-full mt-12 border border-solid px-4 outline-none border-gray-300 bg-zinc-100 border-t-0 border-l-0 border-r-0"
           required
         />
-        {emailError && <p className="text-red-500 text-xs">{emailError}</p>}{" "}
-        {/* Show email error */}
+        {emailError && <p className="text-red-500 text-xs">{emailError}</p>} {/* Show email error */}
         {/* Password Input */}
         <input
           type="password"
@@ -122,10 +123,7 @@ function Login() {
           onKeyDown={handleKeyDown} // Listen for "Enter" key press
           className="h-12 w-full border border-solid px-4 outline-none border-gray-300 bg-zinc-100 border-t-0 border-l-0 border-r-0 "
         />
-        {passwordError && (
-          <p className="text-red-500 text-xs">{passwordError}</p>
-        )}{" "}
-        {/* Show password error */}
+        {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>} {/* Show password error */}
         {/* Login Button */}
         <button
           onClick={handleLogin}
@@ -135,10 +133,7 @@ function Login() {
         </button>
         {/* <h1 className="text-md text-blue-600 cursor-pointer">Forgot Password?</h1> */}
         {/** Back to Website */}
-        <div
-          className="flex justify-center items-center gap-2 mt-32 cursor-pointer"
-          onClick={() => navigate(`/`)}
-        >
+        <div className="flex justify-center items-center gap-2 mt-32 cursor-pointer" onClick={() => navigate(`/`)}>
           <h1 className="text-red-600">Back to Website</h1>
           <FaHome className="text-lg text-red-600 cursor-pointer" />
         </div>
