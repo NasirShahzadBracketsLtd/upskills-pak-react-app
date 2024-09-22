@@ -1,8 +1,6 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../../utils/constants";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { HiUser } from "react-icons/hi2";
 import { logoutApi } from "../../services/auth";
 

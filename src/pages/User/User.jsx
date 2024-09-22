@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-import { API_BASE_URL } from "../../utils/constants";
 import ListUsers from "../../components/User/ListUsers";
 import { fetAllUsers } from "../../services/users";
 
