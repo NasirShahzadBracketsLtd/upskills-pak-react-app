@@ -12,6 +12,7 @@ import CreateCourse from "./components/Course/AddCourse.jsx";
 import SingleUser from "./components/User/SingleUser.jsx";
 import { ToastContainer } from "react-toastify";
 import UpdateUser from "./components/User/UpdateUser.jsx";
+import UpdateCourse from "./components/Course/UpdateCourse.jsx";
 
 function App() {
   const location = useLocation(); // Get the current location
@@ -30,7 +31,7 @@ function App() {
       }}
     >
       <ToastContainer />
-      {shouldShowHeader && <Header isLoggedIn={user?.isLoggedIn} isAdmin={user?.isAdmin} />}
+      {shouldShowHeader && <Header isLoggedIn={user?.isLoggedIn} isAdmin={user?.isAdmin} name={user?.name} />}
       <div style={{ marginTop: shouldShowHeader ? "6rem" : "0" }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -47,8 +48,8 @@ function App() {
           {/** --------------------- Course Routes ---------------------  */}
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:courseId" element={<CourseDetails />} />
-          <Route path="/courses/create-course" element={<CreateCourse />} />
-          <Route path="/courses/update-course/:id" element={<CreateCourse />} />
+          <Route path="/courses/create" element={<CreateCourse />} />
+          <Route path="/courses/update/:courseId" element={<UpdateCourse />} />
         </Routes>
       </div>
     </div>

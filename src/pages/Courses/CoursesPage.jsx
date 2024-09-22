@@ -1,61 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Course from "../../components/Course/Course";
-import AddCourse from "../../components/Course/AddCourse";
-import { courses } from "../../../data";
-import axios from "axios";
-import { API_BASE_URL } from "../../utils/constants";
+import { getAllCourses } from "../../services/courses";
+import { getRoleApi } from "../../services/users";
+
+import { USER_ROLE } from "../../utils/enum";
 
 function CoursesPage() {
-  const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [courses, setCourses] = useState([]);
+  const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  const handleAddCourseClick = () => {
-    navigate(`/courses/create-course`);
-    setIsAddingCourse(true);
-  };
-
-  const handleCourseClick = (course_id) => {
-    navigate(`/courses/${course_id}`);
-  };
-
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    navigate(`/login`);
-  }
-
-  const headers = { headers: { Authorization: `Bearer ${token}` } };
-
   useEffect(() => {
-    const fetchAllCourses = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/courses`, headers);
+        setLoading(true);
 
-        if (response.status !== 200) {
-          console.log(`Error while getting Courses`);
-        }
+        const role = await getRoleApi();
+        setRole(role);
 
-        setCourses(response.data);
+        const courses = await getAllCourses();
+        setCourses(courses);
+
+        setLoading(true);
       } catch (error) {
-        console.log(`Error while getting Courses`, error);
+        toast.error(`Error while fetching courses data.`);
+        console.log(`Error while fetching data.`, error);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchAllCourses();
+    fetchData();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center text-2xl font-semibold py-12 body:bg-red-200">
+        Courses Loading...
+      </div>
+    );
+  }
   return (
     <div>
       <section id="courses" className="min-h-screen bg-slate-200 py-6 px-48">
-        {/** ============================= Add Course Button ============================= */}
-
+        {/** ------------------- Add Course Button ------------------- */}
         <div className="items-end flex justify-end px-6">
-          {!isAddingCourse && (
+          {role === USER_ROLE.ADMIN && (
             <button
-              onClick={handleAddCourseClick}
+              onClick={() => navigate(`/courses/create`)}
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full"
             >
               Add Course
@@ -63,26 +59,17 @@ function CoursesPage() {
           )}
         </div>
 
-        {/** ============================= Show All Courses ============================= */}
-
-        <div className="px-12 pt-6">
-          {isAddingCourse ? (
-            <AddCourse />
-          ) : (
-            <div className="grid grid-cols-3 gap-12">
-              {courses.length > 0 ? (
-                courses.map((course, index) => (
-                  <Course
-                    key={index}
-                    course={course}
-                    onClick={() => handleCourseClick(course._id)} // Pass courseId to navigate
-                  />
-                ))
-              ) : (
-                <h1>Courses not found</h1>
-              )}
-            </div>
-          )}
+        {/** ------------------- Show All Courses ------------------- */}
+        <div className="p-6">
+          <div className="grid grid-cols-3 gap-12 ">
+            {courses.length > 0 ? (
+              courses.map((course, index) => (
+                <Course key={index} course={course} onClick={() => navigate(`/courses/${course._id}`)} />
+              ))
+            ) : (
+              <div>No courses available</div>
+            )}
+          </div>
         </div>
       </section>
     </div>

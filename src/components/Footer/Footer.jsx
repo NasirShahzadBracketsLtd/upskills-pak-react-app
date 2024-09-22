@@ -2,9 +2,8 @@ import React from "react";
 import { FaFacebook } from "react-icons/fa";
 import { PiInstagramLogoFill } from "react-icons/pi";
 import { FaLinkedin } from "react-icons/fa";
-import { SiFiverr } from "react-icons/si";
-import { SiGmail } from "react-icons/si";
 import { IoLogoWhatsapp } from "react-icons/io";
+
 function Footer() {
   return (
     <div className="bg-blue-900 flex px-12 py-6 ">
@@ -19,11 +18,11 @@ function Footer() {
         </p>
       </div>
 
-      {/** ------------------------ Left ------------------------ */}
+      {/** ------------------------ Right ------------------------ */}
       <div className="flex flex-col gap-2 w-1/2 items-start pl-48">
         <div className="flex items-center gap-2">
           <h1 className="text-white font-bold">Phone:</h1>
-          <span className="text-blue-500 font-semibold pl-2"> +92 300 12 12 123</span>
+          <span className="text-blue-500 font-semibold pl-2"> +92 309 77 86 909</span>
         </div>
         <div className="flex items-center gap-2">
           <h1 className="text-white font-bold">Email:</h1>
@@ -36,36 +35,36 @@ function Footer() {
           </span>
         </div>
         <div className="flex gap-2 items-center justify-center">
-          <FaFacebook className=" text-white size-8 hover:cursor-pointer" />
-          <PiInstagramLogoFill className=" text-[#d62976] size-10 hover:cursor-pointer" />
-          <FaLinkedin className=" text-white size-8 hover:cursor-pointer" />
-          <SiFiverr className=" text-[#59e732] text-7xl hover:cursor-pointer" />
+          {/**------------------- Facebook ------------------- */}
+          <a
+            href="https://www.facebook.com/profile.php?id=61563805991979&mibextid=LQQJ4d"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaFacebook className=" text-white size-8 hover:cursor-pointer" />
+          </a>
+
+          {/**------------------- LinkedIn ------------------- */}
+          <a
+            href="https://www.linkedin.com/in/toqeer-khalil-a74a50235?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaLinkedin className=" text-white size-8 hover:cursor-pointer" />
+          </a>
+
+          {/**------------------- Instagram ------------------- */}
+          <a href="" target="_blank" rel="noopener noreferrer">
+            <PiInstagramLogoFill className=" text-[#d62976] size-10 hover:cursor-pointer" />
+          </a>
+
+          {/**------------------- Whatsapp ------------------- */}
+          <a href="https://wa.me/<+923338152157>?text=<message>" target="_blank" rel="noopener noreferrer">
+            <IoLogoWhatsapp className=" text-[#59e732] size-10 hover:cursor-pointer" />
+          </a>
         </div>
       </div>
     </div>
-
-    // <div className="flex flex-col bg-slate-300 pb-6">
-    //   {/** ------------------------ Social Media Links ------------------------ */}
-    //   <div className="flex gap-2 items-center justify-center">
-    //     <FaFacebook className=" text-white size-8" />
-    //     <PiInstagramLogoFill className=" text-[#d62976] size-10" />
-    //     <FaLinkedin className=" text-white size-8" />
-    //     <SiFiverr className=" text-[#59e732] text-7xl" />
-    //   </div>
-
-    //   {/** ------------------------ Contact Details ------------------------ */}
-    //   <div className="flex flex-col md:flex-row gap-8 items-center justify-center">
-    //     <div className="flex items-center gap-2">
-    //       <SiGmail className="text-red-700 size-8" />
-    //       <span className="text-white font-semibold text-xl">test@gmail.com</span>
-    //     </div>
-
-    //     <div className="flex items-center gap-2">
-    //       <IoLogoWhatsapp className="text-[#25D366] size-8" />
-    //       <span className="text-white font-semibold text-xl">+923001212123</span>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 

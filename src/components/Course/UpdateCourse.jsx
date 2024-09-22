@@ -1,55 +1,90 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { getSingleCourse, updateCourseApi } from "../../services/courses";
 
-import { createCourseApi } from "../../services/courses";
-
-const CreateCourse = ({}) => {
+const UpdateCourse = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [coverImage, setCoverImage] = useState("");
-  const [introVideoUrl, setIntroVideoUrl] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [lectures, setLectures] = useState([{ title: "", link: "" }]);
+  const { courseId } = useParams();
   const [loading, setLoading] = useState(false);
 
-  const handleAddLecture = () => {
-    setLectures([...lectures, { title: "", link: "" }]);
+  const [formData, setFormData] = useState({
+    title: "",
+    coverImage: "",
+    introVideoUrl: "",
+    description: "",
+    price: "",
+    lectures: [{ title: "", link: "" }],
+  });
+
+  /**-------------------------------------------------------------------------------
+                            * Handle Lecture Change
+   --------------------------------------------------------------------------------*/
+  const handleLectureChange = (index, field, value) => {
+    const updatedLectures = [...formData.lectures];
+    updatedLectures[index][field] = value;
+    setFormData({ ...formData, lectures: updatedLectures });
   };
 
-  const handleLectureChange = (index, field, value) => {
-    const updatedLectures = [...lectures];
-    updatedLectures[index][field] = value;
-    setLectures(updatedLectures);
+  const handleAddLecture = () => {
+    setFormData({
+      ...formData,
+      lectures: [...formData.lectures, { title: "", link: "" }],
+    });
   };
 
   /**-----------------------------------------------------------------------------
-            * Handle Form Submit (Create Course or Update Course)
+                      * Handle Form Submit (Update Course)
    -----------------------------------------------------------------------------*/
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const courseData = { title, coverImage, introVideoUrl, description, price: parseFloat(price), lectures };
-
     try {
-      await createCourseApi(courseData);
-      toast.success(`Course created successfully.`);
-      navigate("/courses");
+      await updateCourseApi(courseId, formData);
+      toast.success(`Course updated successfully.`);
+      navigate(`/courses/${courseId}`);
     } catch (error) {
-      console.error(`Error creating course:`, error);
+      console.error(`Error updating course:`, error);
     }
   };
 
+  useEffect(() => {
+    const fetchCourseDetails = async (id) => {
+      try {
+        const course = await getSingleCourse(id);
+        setFormData({
+          title: course.title || "",
+          coverImage: course.coverImage || "",
+          introVideoUrl: course.introVideoUrl || "",
+          description: course.description || "",
+          price: course.price || "",
+          lectures: course.lectures || [{ title: "", link: "" }],
+        });
+      } catch (error) {
+        console.error(`Error fetching course:`, error);
+      }
+    };
+
+    if (courseId) {
+      fetchCourseDetails(courseId);
+    }
+  }, [courseId]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   const handleCancel = () => {
-    navigate("/courses"); // Navigate back to the main courses page on cancel
+    navigate(`/courses`);
   };
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 mx-36 mt-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">Create Course</h2>
+      <ToastContainer />
+
+      <h2 className="text-2xl font-bold mb-6 text-center">Update Course</h2>
 
       <form onSubmit={handleSubmit}>
         {/** ---------- Title ---------- */}
@@ -57,26 +92,23 @@ const CreateCourse = ({}) => {
           <input
             type="text"
             placeholder="Course Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onInvalid={(e) => e.target.setCustomValidity(`Course Title is required`)}
-            onInput={(e) => e.target.setCustomValidity(``)}
-            required
           />
         </div>
 
         {/** ---------- Cover Image ---------- */}
+
         <div className="mb-4">
           <input
             type="text"
             placeholder="Cover Image URL"
-            value={coverImage}
-            onChange={(e) => setCoverImage(e.target.value)}
+            name="coverImage"
+            value={formData.coverImage}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onInvalid={(e) => e.target.setCustomValidity(`Course Cover Image required`)}
-            onInput={(e) => e.target.setCustomValidity(``)}
-            required
           />
         </div>
 
@@ -85,12 +117,10 @@ const CreateCourse = ({}) => {
           <input
             type="text"
             placeholder="Intro Video URL"
-            value={introVideoUrl}
-            onChange={(e) => setIntroVideoUrl(e.target.value)}
+            name="introVideoUrl"
+            value={formData.introVideoUrl}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onInvalid={(e) => e.target.setCustomValidity(`Course Intro Video URL required`)}
-            onInput={(e) => e.target.setCustomValidity(``)}
-            required
           />
         </div>
 
@@ -98,13 +128,11 @@ const CreateCourse = ({}) => {
         <div className="mb-4">
           <textarea
             placeholder="Course Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows="4"
-            onInvalid={(e) => e.target.setCustomValidity(`Course Description is required`)}
-            onInput={(e) => e.target.setCustomValidity(``)}
-            required
           />
         </div>
 
@@ -113,19 +141,17 @@ const CreateCourse = ({}) => {
           <input
             type="number"
             placeholder="Price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onInvalid={(e) => e.target.setCustomValidity(`Course Price is required`)}
-            onInput={(e) => e.target.setCustomValidity(``)}
-            required
           />
         </div>
 
         {/** ---------- Lectures ---------- */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold mb-2">Lectures</h3>
-          {lectures.map((lecture, index) => (
+          {formData.lectures.map((lecture, index) => (
             <div key={index} className="mb-4">
               {/** ---------- Lecture Title ---------- */}
               <input
@@ -134,9 +160,6 @@ const CreateCourse = ({}) => {
                 value={lecture.title}
                 onChange={(e) => handleLectureChange(index, "title", e.target.value)}
                 className="w-full mb-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onInvalid={(e) => e.target.setCustomValidity(`Lecture's Title is required`)}
-                onInput={(e) => e.target.setCustomValidity(``)}
-                required
               />
 
               {/** ---------- Lecture URL ---------- */}
@@ -146,13 +169,12 @@ const CreateCourse = ({}) => {
                 value={lecture.link}
                 onChange={(e) => handleLectureChange(index, "link", e.target.value)}
                 className="w-full mb-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onInvalid={(e) => e.target.setCustomValidity(`Lecture's Link is required`)}
-                onInput={(e) => e.target.setCustomValidity(``)}
-                required
               />
-              {index < lectures.length - 1 && <hr className="my-4" />}
+              {index < formData.lectures.length - 1 && <hr className="my-4" />}
             </div>
           ))}
+
+          {/** ---------- Add Lecture Button ---------- */}
 
           <button
             type="button"
@@ -163,7 +185,7 @@ const CreateCourse = ({}) => {
           </button>
         </div>
 
-        {/** ---------- Create, Cancel Buttons ---------- */}
+        {/** ---------- Update Button ---------- */}
         <div className="flex justify-end mt-6 gap-2">
           <button
             type="button"
@@ -176,7 +198,7 @@ const CreateCourse = ({}) => {
             type="submit"
             className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-2 rounded-full focus:outline-none"
           >
-            {loading ? `Creating...` : `Create`}
+            {loading ? `Updating...` : `Update`}
           </button>
         </div>
       </form>
@@ -184,4 +206,4 @@ const CreateCourse = ({}) => {
   );
 };
 
-export default CreateCourse;
+export default UpdateCourse;

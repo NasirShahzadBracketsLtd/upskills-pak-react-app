@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { fetchUser } from "../../services/users";
 
 const UpdateUser = () => {
-  // Added default empty array for `courses`
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [courses, setCourses] = useState([]);
@@ -40,10 +39,7 @@ const UpdateUser = () => {
   useEffect(() => {
     const fetchCoursesList = async () => {
       try {
-        const usersResponse = await axios.get(
-          `${API_BASE_URL}/courses`,
-          headers
-        );
+        const usersResponse = await axios.get(`${API_BASE_URL}/courses`, headers);
         setCourses(usersResponse.data);
       } catch (error) {
         console.log(error);
@@ -71,7 +67,6 @@ const UpdateUser = () => {
   // Prefill form when editing a user
   useEffect(() => {
     if (user) {
-      console.log("user", user);
       setFormData({
         firstName: user.firstName || "",
         lastName: user.lastName || "",
@@ -95,9 +90,7 @@ const UpdateUser = () => {
   const handleCourseChange = (selectedCourses) => {
     setFormData({
       ...formData,
-      enrolledCourses: selectedCourses
-        ? selectedCourses.map((course) => course.value)
-        : [],
+      enrolledCourses: selectedCourses ? selectedCourses.map((course) => course.value) : [],
     });
   };
 
@@ -105,11 +98,7 @@ const UpdateUser = () => {
     e.preventDefault();
     try {
       if (user) {
-        const response = await axios.patch(
-          `${API_BASE_URL}/users/${user._id}`,
-          formData,
-          headers
-        );
+        const response = await axios.patch(`${API_BASE_URL}/users/${user._id}`, formData, headers);
         if (response.status === 200) {
           toast.success(`User Updated Successfully!`);
           navigate(`/users/${user._id}`);
@@ -223,9 +212,7 @@ const UpdateUser = () => {
               aria-label="Status"
             >
               <option value={USER_STATUS.ACTIVE}>{USER_STATUS.ACTIVE}</option>
-              <option value={USER_STATUS.INACTIVE}>
-                {USER_STATUS.INACTIVE}
-              </option>
+              <option value={USER_STATUS.INACTIVE}>{USER_STATUS.INACTIVE}</option>
             </select>
           </div>
 
@@ -239,9 +226,7 @@ const UpdateUser = () => {
                 label: course.title,
               }))}
               value={courses
-                .filter((course) =>
-                  formData.enrolledCourses.includes(course._id)
-                ) // Show preselected courses
+                .filter((course) => formData.enrolledCourses.includes(course._id)) // Show preselected courses
                 .map((course) => ({ value: course._id, label: course.title }))}
               className="basic-multi-select"
               classNamePrefix="select"

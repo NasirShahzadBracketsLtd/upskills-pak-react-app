@@ -1,61 +1,57 @@
-import axios from "axios";
 import YouTube from "react-youtube";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
-import { RxCross1 } from "react-icons/rx";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
-
-import { API_BASE_URL } from "../../utils/constants";
+import { deleteCourseApi, getSingleCourse } from "../../services/courses";
+import { getRoleApi } from "../../services/users";
+import { USER_ROLE } from "../../utils/enum";
 
 const CourseDetails = () => {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [selectedLecture, setSelectedLecture] = useState("");
   const [loading, setLoading] = useState(true); // New loading state
+  const [role, setRole] = useState("");
 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false); // Add loading state
 
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  useEffect(() => {
+    const getLoggedInRole = async () => {
+      try {
+        const role = await getRoleApi();
 
-  if (!token) navigate(`/courses`);
-
-  const headers = { headers: { Authorization: `Bearer ${token}` } };
+        setRole(role);
+      } catch (error) {
+        console.log(`Error while getting role`, error);
+      }
+    };
+    getLoggedInRole();
+  }, []);
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/courses/${courseId}`, headers);
-
-        if (response.status === 200) {
-          // navigate(`/courses`);
-          const courseData = response.data;
-          setCourse(courseData);
-          setSelectedLecture(courseData.introVideoUrl); // Set intro video as default
-          // return;
-        } else {
-          alert(`Course not found`);
-        }
+        const courseResponse = await getSingleCourse(courseId);
+        setCourse(courseResponse);
+        setSelectedLecture(courseResponse.introVideoUrl);
       } catch (error) {
         console.log(`Error while getting Courses`, error);
-        navigate(`/courses`); // Redirect on error
       } finally {
-        setLoading(false); // Stop loading after data fetch is complete
+        setLoading(false);
       }
     };
 
     fetchCourse();
-  }, [courseId]);
+  }, []);
 
   if (loading) {
     return <div className="flex items-center justify-center py-24 text-4xl font-bold">Loading ...</div>;
   }
-
-  if (!course) return <div>Course not found</div>;
 
   const handleLectureClick = (link) => {
     setSelectedLecture(link);
@@ -70,42 +66,35 @@ const CourseDetails = () => {
   };
 
   const handleConfirmDelete = async () => {
-    setIsDeleting(true); // Set loading state
+    setIsDeleting(true);
     try {
-      const response = await axios.delete(`${API_BASE_URL}/courses/${course._id}`, headers);
-
-      if (response.status === 200) {
-        toast.success(`Course Deleted Successfully!!`);
-
-        setTimeout(() => {
-          navigate(`/courses`);
-        }, 2000);
-      }
+      await deleteCourseApi(courseId);
+      navigate(`/courses`);
 
       setShowConfirmation(false);
     } catch (error) {
       console.error(`Failed to delete course`, error);
     } finally {
-      setIsDeleting(false); // Reset loading state
+      setIsDeleting(false);
     }
   };
 
-  // Function to cancel the deletion
   const handleCancelDelete = () => {
     setShowConfirmation(false);
   };
+
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-">
-      <ToastContainer />
-
       {/** ---------------------- Course Edit/Delete Icons ---------------------- */}
-      <div className="flex justify-end">
-        <MdEdit
-          className="text-3xl cursor-pointer text-blue-400"
-          onClick={() => navigate(`/courses/update-course/${course._id}`, { state: { course } })}
-        />
-        <MdDeleteForever className="text-3xl cursor-pointer text-red-400" onClick={handleDeleteClick} />
-      </div>
+      {role === USER_ROLE.ADMIN && (
+        <div className="flex justify-end">
+          <MdEdit
+            className="text-3xl cursor-pointer text-blue-400"
+            onClick={() => navigate(`/courses/update/${course._id}`, { state: { course } })}
+          />
+          <MdDeleteForever className="text-3xl cursor-pointer text-red-400" onClick={handleDeleteClick} />
+        </div>
+      )}
 
       {/** ---------- Title ---------- */}
       <h1 className="text-5xl font-bold mb-6">{course.title}</h1>
@@ -148,14 +137,14 @@ const CourseDetails = () => {
             className="w-full h-64 lg:h-96"
             opts={{
               playerVars: {
-                autoplay: 1,
-                controls: 1, // Basic controls
+                controls: 0, // Basic controls
                 modestbranding: 1, // Reduces YouTube branding
                 rel: 0, // Prevents showing related videos
                 disablekb: 1, // Disables keyboard controls
                 iv_load_policy: 3, // Hides video annotations
                 playsinline: 1, // Plays the video inline on mobile devices
                 cc_load_policy: 0, // Hides closed captions (if available)
+                BlockCopyLink: 1,
               },
             }}
           />

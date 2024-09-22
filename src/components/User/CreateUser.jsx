@@ -37,10 +37,7 @@ const CreateUser = () => {
   useEffect(() => {
     const fetchCoursesList = async () => {
       try {
-        const usersResponse = await axios.get(
-          `${API_BASE_URL}/courses`,
-          headers
-        );
+        const usersResponse = await axios.get(`${API_BASE_URL}/courses`, headers);
         setCourses(usersResponse.data);
       } catch (error) {
         console.log(error);
@@ -59,20 +56,14 @@ const CreateUser = () => {
   const handleCourseChange = (selectedCourses) => {
     setFormData({
       ...formData,
-      enrolledCourses: selectedCourses
-        ? selectedCourses.map((course) => course.value)
-        : [],
+      enrolledCourses: selectedCourses ? selectedCourses.map((course) => course.value) : [],
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/users`,
-        formData,
-        headers
-      );
+      const response = await axios.post(`${API_BASE_URL}/users`, formData, headers);
 
       if (response.status === 201) {
         toast.success(`User Created Successfully!`);
@@ -203,9 +194,7 @@ const CreateUser = () => {
               aria-label="Status"
             >
               <option value={USER_STATUS.ACTIVE}>{USER_STATUS.ACTIVE}</option>
-              <option value={USER_STATUS.INACTIVE}>
-                {USER_STATUS.INACTIVE}
-              </option>
+              <option value={USER_STATUS.INACTIVE}>{USER_STATUS.INACTIVE}</option>
             </select>
           </div>
 
@@ -219,9 +208,7 @@ const CreateUser = () => {
                 label: course.title,
               }))}
               value={courses
-                .filter((course) =>
-                  formData.enrolledCourses.includes(course._id)
-                ) // Show preselected courses
+                .filter((course) => formData.enrolledCourses.includes(course._id)) // Show preselected courses
                 .map((course) => ({ value: course._id, label: course.title }))}
               className="basic-multi-select"
               classNamePrefix="select"

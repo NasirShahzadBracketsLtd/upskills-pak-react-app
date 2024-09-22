@@ -1,22 +1,18 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../utils/constants";
+import { toast, ToastContainer } from "react-toastify";
+import { HiUser } from "react-icons/hi2";
+import { logoutApi } from "../../services/auth";
 
-const Header = ({ isLoggedIn, isAdmin }) => {
-  console.log("isLoggedIn", isLoggedIn);
-  console.log("isAdmin", isAdmin);
+const Header = ({ isLoggedIn, isAdmin, name }) => {
   const navigate = useNavigate();
-
-  const token = localStorage.getItem(`token`);
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/auth/logout`, {}, { headers: { Authorization: `Bearer ${token}` } });
-      console.log("token", token);
-      localStorage.removeItem(`token`);
-      localStorage.removeItem(`user`);
-
+      await logoutApi();
+      toast.success(`Logout Successfully`);
       navigate(`/login`);
     } catch (error) {
       console.log(`Error while logged out`, error);
@@ -29,11 +25,7 @@ const Header = ({ isLoggedIn, isAdmin }) => {
         {/** ---------------------- Logo ---------------------- */}
         <section className="w-1/5 flex justify-start">
           <Link to="/">
-            <img
-              className="w-18 h-24 p-4 rounded-full "
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcm-dWwcZFlFnyd2RWI-_nPQp21tI2_4IbDQ&s"
-              alt="Website Logo"
-            />
+            <img className="w-18 h-24 p-4 rounded-full " src="/logo.JPG" alt="Website Logo" />
           </Link>
         </section>
 
@@ -47,12 +39,12 @@ const Header = ({ isLoggedIn, isAdmin }) => {
           {!isLoggedIn && (
             <>
               <li className="text-xl font-semibold">
-                <a href="#courses" className="hover:font-semibold hover:text-blue-700">
+                <a href="#courses" className="hover:font-semibold hover:text-gray-400">
                   Courses
                 </a>
               </li>
               <li className="text-xl font-semibold">
-                <a href="#services" className="hover:font-semibold hover:text-blue-700">
+                <a href="#services" className="hover:font-semibold hover:text-gray-400">
                   Services
                 </a>
               </li>
@@ -61,12 +53,12 @@ const Header = ({ isLoggedIn, isAdmin }) => {
           {isLoggedIn && isAdmin && (
             <>
               <li className="text-xl font-semibold">
-                <Link to="/users" className="hover:font-semibold hover:text-blue-700">
+                <Link to="/users" className="hover:font-semibold hover:text-gray-400">
                   User
                 </Link>
               </li>
               <li className="text-xl font-semibold">
-                <a href="/courses" className="hover:font-semibold hover:text-blue-700">
+                <a href="/courses" className="hover:font-semibold hover:text-gray-400">
                   Courses
                 </a>
               </li>
@@ -75,7 +67,7 @@ const Header = ({ isLoggedIn, isAdmin }) => {
 
           {isLoggedIn && !isAdmin && (
             <li className="text-xl font-semibold">
-              <Link to="/my-learnings" className="hover:font-semibold hover:text-blue-700">
+              <Link to="/courses" className="hover:font-semibold hover:text-gray-400">
                 My Learnings
               </Link>
             </li>
@@ -83,7 +75,14 @@ const Header = ({ isLoggedIn, isAdmin }) => {
         </ul>
 
         {/** ---------------------- Login/Logout Button ---------------------- */}
-        <section className="w-1/5 flex justify-end">
+        <section className="w-1/5 flex justify-end gap-4">
+          {/** ---------------------- Logged-In User Name ---------------------- */}
+          {name && (
+            <div className="flex gap-1 items-center">
+              <HiUser className="size-5 font-bold " />
+              <h1 className="text-xl inline-block truncate max-w-xs">{name}</h1>
+            </div>
+          )}
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
