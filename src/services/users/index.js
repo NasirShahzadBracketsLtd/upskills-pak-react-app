@@ -4,6 +4,13 @@ import api from "../api";
 const token = localStorage.getItem(TOKEN);
 const headers = { headers: { Authorization: `Bearer ${token}` } };
 
+export const createUserApi = async (formData) => {
+  const response = await api.post(`${API_BASE_URL}/users`, formData, headers);
+  if (response.status === 201) {
+    return response.data;
+  }
+};
+
 export const fetchUser = async (id) => {
   const response = await api.get(`${API_BASE_URL}/users/${id}`, headers);
   if (response.status === 200) {

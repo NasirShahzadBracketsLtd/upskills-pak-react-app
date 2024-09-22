@@ -3,7 +3,7 @@ import { USER_ROLE, USER_STATUS } from "../../utils/enum";
 import { useNavigate } from "react-router-dom";
 
 const ListUsers = ({ users }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div className="overflow-x-auto px-36">
       <table className="min-w-full bg-white border border-gray-300 shadow-md">

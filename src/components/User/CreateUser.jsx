@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { USER_GENDER, USER_ROLE, USER_STATUS } from "../../utils/enum";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { API_BASE_URL } from "../../utils/constants";
 import { toast } from "react-toastify";
+import { getAllCourses } from "../../services/courses";
+import { createUserApi } from "../../services/users";
 
 const CreateUser = () => {
-  // Added default empty array for `courses`
   const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
 
@@ -24,35 +23,32 @@ const CreateUser = () => {
   });
 
   /**-------------------------------------------------------------------
-                     * Handle Token and Headers
+              * Get All Corses to show in Courses-Drop-Down
    -------------------------------------------------------------------*/
-
-  const token = localStorage.getItem(`token`);
-
-  if (!token) {
-    navigate(`/login`);
-  }
-  const headers = { headers: { Authorization: `Bearer ${token}` } };
-
   useEffect(() => {
     const fetchCoursesList = async () => {
       try {
-        const usersResponse = await axios.get(`${API_BASE_URL}/courses`, headers);
-        setCourses(usersResponse.data);
+        const courses = await getAllCourses();
+        setCourses(courses);
       } catch (error) {
         console.log(error);
+        toast.error(`Error while fetching courses.`);
       }
     };
     fetchCoursesList();
   }, []);
 
-  // Handle input change for regular inputs
+  /**-------------------------------------------------------------------
+                * Handle input change for regular inputs
+   -------------------------------------------------------------------*/
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle multi-select change for enrolled courses
+  /**-------------------------------------------------------------------
+            * Handle multi-select change for enrolled courses
+   -------------------------------------------------------------------*/
   const handleCourseChange = (selectedCourses) => {
     setFormData({
       ...formData,
@@ -60,20 +56,19 @@ const CreateUser = () => {
     });
   };
 
+  /**-------------------------------------------------------------------
+                        * Handle Create User
+   -------------------------------------------------------------------*/
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_BASE_URL}/users`, formData, headers);
-
-      if (response.status === 201) {
-        toast.success(`User Created Successfully!`);
-        navigate(`/users`);
-      } else {
-        toast.error(`Failed to create user. Please try again.`);
-      }
+      await createUserApi(formData);
+      toast.success(`User Created Successfully!`);
+      navigate(`/users`);
     } catch (err) {
       console.log(err);
-      toast.error(err.response.data.message);
+      toast.error(`Error while creating user.`);
     }
   };
 
@@ -82,7 +77,7 @@ const CreateUser = () => {
       <h2 className="text-2xl font-bold mb-6">{`Add User`}</h2>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {/* FirstName */}
+          {/* --------------------- FirstName --------------------- */}
           <div className="mb-4">
             <input
               type="text"
@@ -96,7 +91,7 @@ const CreateUser = () => {
             />
           </div>
 
-          {/* LastName */}
+          {/* --------------------- LastName --------------------- */}
           <div className="mb-4">
             <input
               type="text"
@@ -110,7 +105,7 @@ const CreateUser = () => {
             />
           </div>
 
-          {/* Email */}
+          {/* --------------------- Email --------------------- */}
           <div className="mb-4">
             <input
               type="email"
@@ -124,7 +119,7 @@ const CreateUser = () => {
             />
           </div>
 
-          {/* Password (optional for update) */}
+          {/* --------------------- Password (optional for update) --------------------- */}
           <div className="mb-4">
             <input
               type="password"
@@ -138,7 +133,7 @@ const CreateUser = () => {
             />
           </div>
 
-          {/* Gender */}
+          {/* --------------------- Gender --------------------- */}
           <div className="mb-4">
             <select
               name="gender"
@@ -154,7 +149,7 @@ const CreateUser = () => {
             </select>
           </div>
 
-          {/* PhoneNumber */}
+          {/* --------------------- PhoneNumber --------------------- */}
           <div className="mb-4">
             <input
               type="text"
@@ -168,7 +163,7 @@ const CreateUser = () => {
             />
           </div>
 
-          {/* Role */}
+          {/* --------------------- Role --------------------- */}
           <div className="mb-4">
             <select
               name="role"
@@ -183,7 +178,7 @@ const CreateUser = () => {
             </select>
           </div>
 
-          {/* Status */}
+          {/* --------------------- Status --------------------- */}
           <div className="mb-4">
             <select
               name="status"
@@ -198,7 +193,7 @@ const CreateUser = () => {
             </select>
           </div>
 
-          {/* Enrolled Courses */}
+          {/* --------------------- Enrolled Courses --------------------- */}
           <div className="mb-4 col-span-2">
             <Select
               isMulti
