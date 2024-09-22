@@ -1,73 +1,57 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom"; // assuming you're using react-router
-import { ToastContainer, toast } from "react-toastify";
-
+import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
-
 import { USER_ROLE, USER_STATUS } from "../../utils/enum";
-import { API_BASE_URL } from "../../utils/constants";
-import { fetchUser } from "../../services/users";
+import { deleteUserApi, fetchUser } from "../../services/users";
 
 const SingleUser = () => {
   const { userId } = useParams();
   const [user, setUser] = useState();
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false); // Add loading state
-  const navigate = useNavigate(); // for navigation to login if token is missing
+  const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
 
-  // Function to confirm deletion
-  const handleDeleteClick = () => {
-    setShowConfirmation(true);
-  };
-
+  /**-------------------------------------------------------------------
+                          * Get User Details
+   -------------------------------------------------------------------*/
   useEffect(() => {
     const fetchUserDetails = async (id) => {
       try {
         const user = await fetchUser(id);
         setUser(user);
       } catch (error) {
-        console.log("Error while fetching user", error);
+        console.log(`Error while fetching user`, error);
+        toast.error(`Error while fetching user`);
       }
     };
     fetchUserDetails(userId);
   }, [userId]);
 
-  // Function to actually delete the user after confirmation
+  /**-------------------------------------------------------------------
+                          * Delete User
+   -------------------------------------------------------------------*/
   const handleConfirmDelete = async () => {
-    setIsDeleting(true); // Set loading state
+    setIsDeleting(true);
     try {
-      const token = localStorage.getItem("token");
+      await deleteUserApi(user._id);
+      toast.success(`User deleted successfully`);
+      navigate(`/users`);
 
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      const headers = { headers: { Authorization: `Bearer ${token}` } };
-
-      const response = await axios.delete(
-        `${API_BASE_URL}/users/${user._id}`,
-        headers
-      );
-
-      if (response.status === 200) {
-        toast.success(`User deleted successfully`);
-        navigate("/users");
-        // If delete was successful, trigger a callback to update UI or close modal
-      }
-
-      // If delete was successful, trigger a callback to update UI or close modal
       setShowConfirmation(false);
     } catch (error) {
       console.error(`Failed to delete user`, error);
+      toast.error(`Failed to delete user`);
     } finally {
-      setIsDeleting(false); // Reset loading state
+      setIsDeleting(false);
     }
   };
 
-  // Function to cancel the deletion
+  const handleDeleteClick = () => {
+    setShowConfirmation(true);
+  };
+
   const handleCancelDelete = () => {
     setShowConfirmation(false);
   };
@@ -83,16 +67,10 @@ const SingleUser = () => {
                 className="text-3xl cursor-pointer text-blue-400"
                 onClick={() => navigate(`/users/update/${user._id}`)}
               />
-              <MdDeleteForever
-                className="text-3xl cursor-pointer text-red-400"
-                onClick={handleDeleteClick}
-              />
+              <MdDeleteForever className="text-3xl cursor-pointer text-red-400" onClick={handleDeleteClick} />
             </div>
             <div>
-              <RxCross1
-                className="text-4xl cursor-pointer text-red-400"
-                onClick={() => navigate("/users")}
-              />
+              <RxCross1 className="text-4xl cursor-pointer text-red-400" onClick={() => navigate("/users")} />
             </div>
           </div>
 
@@ -118,9 +96,7 @@ const SingleUser = () => {
               <h3 className="text-xl font-semibold">Role</h3>
               <p
                 className={`text-lg font-semibold ${
-                  user.role === USER_ROLE.ADMIN
-                    ? "text-green-500"
-                    : "text-blue-500"
+                  user.role === USER_ROLE.ADMIN ? "text-green-500" : "text-blue-500"
                 }`}
               >
                 {user.role}
@@ -130,14 +106,10 @@ const SingleUser = () => {
               <h3 className="text-xl font-semibold">Status</h3>
               <p
                 className={`text-lg font-semibold ${
-                  user.status === USER_STATUS.ACTIVE
-                    ? "text-green-500"
-                    : "text-red-500"
+                  user.status === USER_STATUS.ACTIVE ? "text-green-500" : "text-red-500"
                 }`}
               >
-                {user.status === USER_STATUS.ACTIVE
-                  ? USER_STATUS.ACTIVE
-                  : USER_STATUS.INACTIVE}
+                {user.status === USER_STATUS.ACTIVE ? USER_STATUS.ACTIVE : USER_STATUS.INACTIVE}
               </p>
             </div>
             <div className="mb-4">

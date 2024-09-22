@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { USER_GENDER, USER_ROLE, USER_STATUS } from "../../utils/enum";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import { API_BASE_URL } from "../../utils/constants";
 import { toast } from "react-toastify";
-import { fetchUser } from "../../services/users";
+import { fetchUser, updateUserApi } from "../../services/users";
+import { getAllCourses } from "../../services/courses";
 
 const UpdateUser = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -26,21 +26,13 @@ const UpdateUser = () => {
   });
 
   /**-------------------------------------------------------------------
-                     * Handle Token and Headers
+                        * Get All Courses
    -------------------------------------------------------------------*/
-
-  const token = localStorage.getItem(`token`);
-
-  if (!token) {
-    navigate(`/login`);
-  }
-  const headers = { headers: { Authorization: `Bearer ${token}` } };
-
   useEffect(() => {
     const fetchCoursesList = async () => {
       try {
-        const usersResponse = await axios.get(`${API_BASE_URL}/courses`, headers);
-        setCourses(usersResponse.data);
+        const courses = await getAllCourses();
+        setCourses(courses);
       } catch (error) {
         console.log(error);
       }
@@ -48,14 +40,17 @@ const UpdateUser = () => {
     fetchCoursesList();
   }, []);
 
-  // Fetch user data when the component mounts if an ID is present
+  /**-------------------------------------------------------------------
+                        * Get User Details
+   -------------------------------------------------------------------*/
   useEffect(() => {
     const fetchUserDetails = async (id) => {
       try {
         const user = await fetchUser(id);
         setUser(user);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error(`Error while fetching user details`, error);
+        toast.error(`Error while fetching user details`);
       }
     };
 
@@ -64,7 +59,9 @@ const UpdateUser = () => {
     }
   }, [userId]);
 
-  // Prefill form when editing a user
+  /**-------------------------------------------------------------------
+                        * Prefill User's Details
+   -------------------------------------------------------------------*/
   useEffect(() => {
     if (user) {
       setFormData({
@@ -80,33 +77,45 @@ const UpdateUser = () => {
     }
   }, [user]);
 
-  // Handle input change for regular inputs
+  /**-------------------------------------------------------------------
+                          * Update User
+   -------------------------------------------------------------------*/
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      if (user) {
+        const _user_id = user?._id;
+        await updateUserApi(_user_id, formData);
+        toast.success(`User Updated Successfully!`);
+        navigate(`/users/${_user_id}`);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(`Error while updating user.`, error);
+      toast.error(`Failed to update user. Please try again.`);
+    } finally {
+      setLoading(false);
+    }
+  };
+  /**-------------------------------------------------------------------
+                * Handle Change
+                * 1. For Normal Input Fields
+                * 2. Multi-Select change for Enrolled Courses
+   -------------------------------------------------------------------*/
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle multi-select change for enrolled courses
   const handleCourseChange = (selectedCourses) => {
     setFormData({
       ...formData,
       enrolledCourses: selectedCourses ? selectedCourses.map((course) => course.value) : [],
     });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (user) {
-        const response = await axios.patch(`${API_BASE_URL}/users/${user._id}`, formData, headers);
-        if (response.status === 200) {
-          toast.success(`User Updated Successfully!`);
-          navigate(`/users/${user._id}`);
-        }
-      }
-    } catch (err) {
-      toast.error(`Failed to update user. Please try again.`);
-    }
   };
 
   return (
@@ -249,7 +258,7 @@ const UpdateUser = () => {
             type="submit"
             className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-2 rounded-full focus:outline-none"
           >
-            {"Update User"}
+            {loading ? `Updating...` : `Update User`}
           </button>
         </div>
       </form>
