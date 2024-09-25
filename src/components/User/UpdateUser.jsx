@@ -165,6 +165,18 @@ const UpdateUser = () => {
             />
           </div>
 
+          {/* Email */}
+          <div className="mb-4">
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Email"
+            />
+          </div>
           {/* Gender */}
           <div className="mb-4">
             <select

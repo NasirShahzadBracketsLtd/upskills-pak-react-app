@@ -25,7 +25,7 @@ function Login() {
 
       localStorage.setItem(`user`, JSON.stringify({ isLoggedIn: true, isAdmin: role === USER_ROLE.ADMIN, name }));
 
-      toast.success(`Login successful!`);
+      toast.success(`Login successful!`, { autoClose: 2000 });
 
       navigate(`/`);
 
@@ -34,7 +34,7 @@ function Login() {
       console.log(error);
 
       if (error.response && error.response.status === 401) {
-        toast.error(`Invalid Credentials!`);
+        toast.error(`Invalid Credentials!`, { autoClose: 3000 });
       } else {
         toast.error(`An error occurred. Please try again later.`);
       }

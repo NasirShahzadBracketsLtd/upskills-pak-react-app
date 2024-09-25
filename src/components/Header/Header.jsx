@@ -5,15 +5,20 @@ import { HiUser } from "react-icons/hi2";
 import { logoutApi } from "../../services/auth";
 
 const Header = ({ isLoggedIn, isAdmin, name }) => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
+      setLoading(true);
       await logoutApi();
-      toast.success(`Logout Successfully`);
+      toast.success(`Logout Successfully`, { autoClose: 5000 });
+      setLoading(false);
       navigate(`/login`);
     } catch (error) {
       console.log(`Error while logged out`, error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,7 +91,28 @@ const Header = ({ isLoggedIn, isAdmin, name }) => {
               onClick={handleLogout}
               className="px-4 py-2 flex items-center justify-center border w-[7rem] text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
             >
-              Logout
+              {loading ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 mr-2 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                  </svg>
+                </>
+              ) : (
+                `Logout`
+              )}
             </button>
           ) : (
             <Link

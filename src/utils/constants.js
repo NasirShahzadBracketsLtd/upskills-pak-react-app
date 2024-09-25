@@ -1,4 +1,6 @@
-export const API_BASE_URL = "http://localhost:3011";
+export const API_BASE_URL = "http://3.110.175.159";
+// export const API_BASE_URL = "http://localhost:3011";
+
 // export const API_BASE_URL = "https://dvtvp7n0-3011.inc1.devtunnels.ms/";
 
 export const TOKEN = `token`;

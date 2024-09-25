@@ -5,7 +5,6 @@ import { fetAllUsers } from "../../services/users";
 
 function User() {
   const [users, setUsers] = useState([]);
-
   const navigate = useNavigate();
 
   /**---------------------------------------------------------------------
