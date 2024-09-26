@@ -13,6 +13,7 @@ import SingleUser from "./components/User/SingleUser.jsx";
 import { ToastContainer } from "react-toastify";
 import UpdateUser from "./components/User/UpdateUser.jsx";
 import UpdateCourse from "./components/Course/UpdateCourse.jsx";
+import PublicCourseDetails from "./components/Course/PublicCourseDetails.jsx";
 
 function App() {
   const location = useLocation(); // Get the current location
@@ -48,6 +49,7 @@ function App() {
           {/** --------------------- Course Routes ---------------------  */}
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:courseId" element={<CourseDetails />} />
+          <Route path="/courses/public/:courseId" element={<PublicCourseDetails />} />
           <Route path="/courses/create" element={<CreateCourse />} />
           <Route path="/courses/update/:courseId" element={<UpdateCourse />} />
         </Routes>

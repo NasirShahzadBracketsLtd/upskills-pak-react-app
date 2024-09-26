@@ -22,15 +22,15 @@ function Footer() {
       <div className="flex flex-col gap-2 w-1/2 items-start pl-48">
         <div className="flex items-center gap-2">
           <h1 className="text-white font-bold">Phone:</h1>
-          <span className="text-blue-500 font-semibold pl-2"> +92 309 77 86 909</span>
+          <span className="text-blue-200 font-semibold pl-2"> +92 309 77 86 909</span>
         </div>
         <div className="flex items-center gap-2">
           <h1 className="text-white font-bold">Email:</h1>
-          <span className="text-blue-500 font-semibold pl-4">upskillspakistan@gmail.com</span>
+          <span className="text-blue-200 font-semibold pl-4">upskillspakistan@gmail.com</span>
         </div>
         <div className="flex items-center gap-2">
           <h1 className="text-white font-bold">Address:</h1>
-          <span className="text-blue-500 font-semibold">
+          <span className="text-blue-200 font-semibold">
             Trafalgar Square Ikraam Heights New Metro City Sarai-Alamgir
           </span>
         </div>
@@ -54,7 +54,11 @@ function Footer() {
           </a>
 
           {/**------------------- Instagram ------------------- */}
-          <a href="" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.instagram.com/invites/contact/?igsh=13gjtuq2g4od0&utm_content=vaeeg38"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <PiInstagramLogoFill className=" text-[#d62976] size-10 hover:cursor-pointer" />
           </a>
 

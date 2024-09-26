@@ -1,10 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Course from "../../components/Course/Course";
 import { TypeAnimation } from "react-type-animation";
 import { courses } from "../../../data";
 import Footer from "../../components/Footer/Footer";
+import { getAllPublicCoursesApi } from "../../services/courses";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const courses = await getAllPublicCoursesApi();
+        setCourses(courses);
+
+        setLoading(true);
+      } catch (error) {
+        toast.error(`Error while fetching courses data.`);
+        console.log(`Error while fetching data.`, error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <main className="h-full w-full">
       {/** ======================= Main Cover Section ======================= */}
@@ -12,7 +38,7 @@ function Home() {
         id="home"
         className="flex items-center justify-center h-[40rem] bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url(https://www.webfx.com/wp-content/uploads/2008/12/012412_website_footer_examples.png)",
+          backgroundImage: "url('./cover.png')",
         }}
       >
         <div className="text-center">
@@ -55,7 +81,7 @@ function Home() {
 
         <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {courses.map((course, index) => (
-            <Course key={index} course={course} />
+            <Course key={index} course={course} onClick={() => navigate(`/courses/public/${course._id}`)} />
           ))}
         </div>
       </section>
@@ -74,33 +100,30 @@ function Home() {
           <div
             className="bg-red-500 h-40 flex flex-col justify-center items-center bg-cover bg-center"
             style={{
-              backgroundImage:
-                "url(https://png.pngtree.com/thumb_back/fh260/background/20200729/pngtree-colorful-flow-background-with-fluid-form-image_372440.jpg)",
+              backgroundImage: "url('./courses.jpg')",
             }}
           >
-            <h3 className="text-7xl font-bold">10+</h3>
+            <h3 className="text-7xl font-bold">5</h3>
             <p className="text-2xl font-semibold">Courses</p>
           </div>
 
           <div
             className="bg-red-500 h-40 flex flex-col justify-center items-center bg-cover bg-center"
             style={{
-              backgroundImage:
-                "url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwlqlKIYVdDhCNTpSM_u08fsAQfAGmNwtkyg&s)",
+              backgroundImage: "url('./clients.jpg')",
             }}
           >
-            <h3 className="text-7xl font-bold">12+</h3>
+            <h3 className="text-7xl font-bold">50+</h3>
             <p className="text-2xl font-semibold">Clients</p>
           </div>
 
           <div
             className="bg-red-500 h-40 flex flex-col justify-center items-center bg-cover bg-center"
             style={{
-              backgroundImage:
-                "url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDgT79WmO40PVml-JFlthHXJi90DnQy9ozQRokKpITqUtYDPPH4B3nhtmFptVgDhiNovg&usqp=CAU)",
+              backgroundImage: "url('./students.jpg')",
             }}
           >
-            <h3 className="text-7xl font-bold">80+</h3>
+            <h3 className="text-7xl font-bold">300+</h3>
             <p className="text-2xl font-semibold">Students</p>
           </div>
         </div>

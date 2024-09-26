@@ -1,3 +1,4 @@
+import axios from "axios";
 import { API_BASE_URL } from "../../utils/constants";
 import api from "../api";
 
@@ -41,7 +42,7 @@ export const updateCourseApi = async (id, courseData) => {
 };
 
 export const getAllPublicCoursesApi = async () => {
-  const response = await api.get(`${API_BASE_URL}/courses/public/courses`);
+  const response = await axios.get(`${API_BASE_URL}/courses/public/courses`);
 
   if (response.status === 200) {
     return response.data;
@@ -49,7 +50,7 @@ export const getAllPublicCoursesApi = async () => {
 };
 
 export const getSinglePublicCourseApi = async (_course_id) => {
-  const response = await api.get(`${API_BASE_URL}/courses/public/course/${_course_id}`);
+  const response = await axios.get(`${API_BASE_URL}/courses/public/course/${_course_id}`);
 
   if (response.status === 200) {
     return response.data;

@@ -97,13 +97,15 @@ const CourseDetails = () => {
       )}
 
       {/** ---------- Title ---------- */}
-      <h1 className="text-5xl font-bold mb-6">{course.title}</h1>
+      <h1 className="text-5xl font-bold mb-6 text-center">{course.title}</h1>
 
       {/** ---------- Description ---------- */}
-      <p className="text-lg mb-6 text-gray-600">{course.description}</p>
+      <div className="bg-gray-200 p-6 rounded-lg">
+        <p className="text-lg text-justify">{course.description}</p>
+      </div>
 
       {/** ---------- Lectures ---------- */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+      <div className="flex gap-12 pt-12 p-4">
         <div className="lg:col-span-2 ">
           <h2 className="text-4xl font-bold mb-4">Lectures</h2>
           <ul className="space-y-4 bg-gray-200 p-4 rounded-lg">
