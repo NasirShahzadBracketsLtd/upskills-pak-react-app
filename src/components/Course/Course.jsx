@@ -7,19 +7,19 @@ function Course({ course, onClick }) {
       <div
         className="flex flex-col  h-2/3 bg-red-500 w-full gap-8 rounded-lg rounded-b-none items-center bg-no-repeat bg-cover justify-between p-12"
         style={{
-          backgroundImage: `url(${course.image})`,
+          backgroundImage: `url(${course.coverImage})`,
         }}
       ></div>
 
       {/** ------------------ Course Details(Name,Price etc.) ------------------ */}
-      <div className="w-full p-4">
-        <h1 className="text-blue-700 font-semibold text-3xl">{course.title}</h1>
-        <div className="bg-slate-200 inline-block px-4 justify-center content-center h-8 rounded-full mt-1">
-          <h1 className="bgred overflow-hidden text-ellipsis text-md">
-            <span className="text-xl">Price: </span>
-            <span className="text-blue-700 text-2xl font-bold"> {course.price}</span>
-            <span className="text-xl"> Rs</span>
-          </h1>
+      <div className="w-full p-2">
+        <div className="h-12">
+          <h1 className="text-blue-700 font-semibold text-xl">{course.title}</h1>
+        </div>
+        <div className="bg-slate-300 inline-block px-4 justify-center h-7 rounded-full mt-2">
+          <span className="text-sm">Price: </span>
+          <span className="text-blue-700 text-lg font-bold "> {course.price}</span>
+          <span className="text-sm"> Rs</span>
         </div>
       </div>
     </div>

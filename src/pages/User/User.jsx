@@ -1,46 +1,42 @@
-import React, { useState } from "react";
-import { courses, users } from "../../../data";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ListUsers from "../../components/User/ListUsers";
-import CreateUser from "../../components/User/CreateUser";
-import SingleUser from "../../components/User/SingleUser";
+import { fetAllUsers } from "../../services/users";
 
 function User() {
-  const [isAddingUser, setIsAddingUser] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
-  const handleAddUser = () => {
-    setIsAddingUser(true);
-    setSelectedUser(null); // Reset selected user when adding a new user
-  };
-
-  const handleCancel = () => {
-    setIsAddingUser(false);
-  };
-
-  const handleSelectUser = (user) => {
-    setSelectedUser(user);
-    setIsAddingUser(false); // Hide the add user form if any user is selected
-  };
-
-  const handleCloseUserView = () => {
-    setSelectedUser(null);
-  };
+  /**---------------------------------------------------------------------
+                        * Fet Users & Courses
+   ---------------------------------------------------------------------*/
+  useEffect(() => {
+    const fetchUsersList = async () => {
+      try {
+        const users = await fetAllUsers();
+        setUsers(users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUsersList();
+  }, []);
 
   return (
     <div className="bg-gray-300 py-6 h-screen">
       <div className="flex justify-between items-center px-36 pb-6">
         <h1 className="text-2xl font-semibold">Users</h1>
-        {!isAddingUser && (
-          <button onClick={handleAddUser} className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 rounded-full">
-            Add User
-          </button>
-        )}
+
+        <button
+          onClick={() => navigate("/users/create")}
+          className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 rounded-full"
+        >
+          Add User
+        </button>
       </div>
 
       <div>
-        {isAddingUser && <CreateUser onCancel={handleCancel} courses={courses} />}
-        {!isAddingUser && selectedUser && <SingleUser user={selectedUser} onClose={handleCloseUserView} />}
-        {!isAddingUser && !selectedUser && <ListUsers users={users} onSelectUser={handleSelectUser} />}
+        <ListUsers users={users} />
       </div>
     </div>
   );
