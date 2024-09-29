@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { createCourseApi } from "../../services/courses";
+import { TOAST_OPTIONS } from "../../utils/constants";
 
 const CreateCourse = ({}) => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const CreateCourse = ({}) => {
 
     try {
       await createCourseApi(courseData);
-      toast.success(`Course created successfully.`);
+      toast.success(`Course created successfully.`, TOAST_OPTIONS);
       navigate("/courses");
     } catch (error) {
       console.error(`Error creating course:`, error);

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { HiUser } from "react-icons/hi2";
 import { logoutApi } from "../../services/auth";
+import { TOAST_OPTIONS } from "../../utils/constants";
 
 const Header = ({ isLoggedIn, isAdmin, name }) => {
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,7 @@ const Header = ({ isLoggedIn, isAdmin, name }) => {
     try {
       setLoading(true);
       await logoutApi();
-      toast.success(`Logout Successfully`, { autoClose: 5000 });
+      toast.success(`Good Bye.`, TOAST_OPTIONS);
       setLoading(false);
       navigate(`/login`);
     } catch (error) {

@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { fetchUser, updateUserApi } from "../../services/users";
 import { getAllCourses } from "../../services/courses";
+import { TOAST_OPTIONS } from "../../utils/constants";
+import "react-toastify/dist/ReactToastify.css";
 
 const UpdateUser = () => {
   const { userId } = useParams();
@@ -88,14 +90,19 @@ const UpdateUser = () => {
       setLoading(true);
       if (user) {
         const _user_id = user?._id;
+
         await updateUserApi(_user_id, formData);
-        toast.success(`User Updated Successfully!`);
+        toast.success(`User Updated Successfully!`, TOAST_OPTIONS);
         navigate(`/users/${_user_id}`);
         setLoading(false);
       }
     } catch (error) {
-      console.log(`Error while updating user.`, error);
-      toast.error(`Failed to update user. Please try again.`);
+      if (error.status === 409) {
+        toast.error(`User already exist with given Email/Phone.`, TOAST_OPTIONS);
+      } else {
+        console.log(`Error while updating user.`, error);
+        toast.error(`Failed to update user. Please try again.`, TOAST_OPTIONS);
+      }
     } finally {
       setLoading(false);
     }
@@ -123,7 +130,7 @@ const UpdateUser = () => {
       <h2 className="text-2xl font-bold mb-6">{`Update User`}</h2>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {/* FirstName */}
+          {/*----------------------- FirstName --------------------*/}
           <div className="mb-4">
             <input
               type="text"
@@ -137,7 +144,7 @@ const UpdateUser = () => {
             />
           </div>
 
-          {/* LastName */}
+          {/*----------------------- LastName --------------------*/}
           <div className="mb-4">
             <input
               type="text"
@@ -151,7 +158,7 @@ const UpdateUser = () => {
             />
           </div>
 
-          {/* Email */}
+          {/*----------------------- Email --------------------*/}
           <div className="mb-4">
             <input
               type="email"
@@ -165,7 +172,7 @@ const UpdateUser = () => {
             />
           </div>
 
-          {/* Email */}
+          {/*----------------------- Email --------------------*/}
           <div className="mb-4">
             <input
               type="password"
@@ -177,7 +184,7 @@ const UpdateUser = () => {
               aria-label="Email"
             />
           </div>
-          {/* Gender */}
+          {/*----------------------- Gender --------------------*/}
           <div className="mb-4">
             <select
               name="gender"
@@ -193,7 +200,7 @@ const UpdateUser = () => {
             </select>
           </div>
 
-          {/* PhoneNumber */}
+          {/*----------------------- PhoneNumber --------------------*/}
           <div className="mb-4">
             <input
               type="text"
@@ -207,7 +214,7 @@ const UpdateUser = () => {
             />
           </div>
 
-          {/* Role */}
+          {/*----------------------- Role --------------------*/}
           <div className="mb-4">
             <select
               name="role"
@@ -222,7 +229,7 @@ const UpdateUser = () => {
             </select>
           </div>
 
-          {/* Status */}
+          {/*----------------------- Status --------------------*/}
           <div className="mb-4">
             <select
               name="status"
@@ -237,7 +244,7 @@ const UpdateUser = () => {
             </select>
           </div>
 
-          {/* Enrolled Courses */}
+          {/*----------------------- Enrolled Courses --------------------*/}
           <div className="mb-4 col-span-2">
             <Select
               isMulti

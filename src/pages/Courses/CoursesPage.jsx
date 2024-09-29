@@ -7,6 +7,7 @@ import { getAllCourses } from "../../services/courses";
 import { getRoleApi } from "../../services/users";
 
 import { USER_ROLE } from "../../utils/enum";
+import { TOAST_OPTIONS } from "../../utils/constants";
 
 function CoursesPage() {
   const [courses, setCourses] = useState([]);
@@ -28,7 +29,7 @@ function CoursesPage() {
 
         setLoading(true);
       } catch (error) {
-        toast.error(`Error while fetching courses data.`);
+        toast.error(`Error while fetching courses data.`, TOAST_OPTIONS);
         console.log(`Error while fetching data.`, error);
       } finally {
         setLoading(false);

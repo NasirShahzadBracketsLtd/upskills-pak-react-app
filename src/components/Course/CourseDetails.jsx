@@ -1,8 +1,6 @@
 import YouTube from "react-youtube";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-
 import { MdEdit, MdDeleteForever } from "react-icons/md";
 import { deleteCourseApi, getSingleCourse } from "../../services/courses";
 import { getRoleApi } from "../../services/users";
@@ -12,14 +10,16 @@ const CourseDetails = () => {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [selectedLecture, setSelectedLecture] = useState("");
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true);
   const [role, setRole] = useState("");
-
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false); // Add loading state
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const navigate = useNavigate();
 
+  /**------------------------------------------------------------------
+                      * Get Logged In User Role
+   ------------------------------------------------------------------*/
   useEffect(() => {
     const getLoggedInRole = async () => {
       try {
@@ -33,6 +33,9 @@ const CourseDetails = () => {
     getLoggedInRole();
   }, []);
 
+  /**------------------------------------------------------------------
+                      * Fetch Course Details
+   ------------------------------------------------------------------*/
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -49,6 +52,9 @@ const CourseDetails = () => {
     fetchCourse();
   }, []);
 
+  /**------------------------------------------------------------------
+                            * Loading
+   ------------------------------------------------------------------*/
   if (loading) {
     return <div className="flex items-center justify-center py-24 text-4xl font-bold">Loading ...</div>;
   }
@@ -60,11 +66,6 @@ const CourseDetails = () => {
   /**---------------------------------------------------------------------
                             * Delete Course
    ---------------------------------------------------------------------*/
-
-  const handleDeleteClick = () => {
-    setShowConfirmation(true);
-  };
-
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     try {
@@ -77,6 +78,10 @@ const CourseDetails = () => {
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const handleDeleteClick = () => {
+    setShowConfirmation(true);
   };
 
   const handleCancelDelete = () => {

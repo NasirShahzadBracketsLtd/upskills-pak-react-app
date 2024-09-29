@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { getSingleCourse, updateCourseApi } from "../../services/courses";
+import { TOAST_OPTIONS } from "../../utils/constants";
+import "react-toastify/dist/ReactToastify.css";
 
 const UpdateCourse = () => {
   const navigate = useNavigate();
@@ -42,10 +44,11 @@ const UpdateCourse = () => {
 
     try {
       await updateCourseApi(courseId, formData);
-      toast.success(`Course updated successfully.`);
+      toast.success(`Course updated successfully.`, TOAST_OPTIONS);
       navigate(`/courses/${courseId}`);
     } catch (error) {
       console.error(`Error updating course:`, error);
+      toast.error(`Error while updating course.`, TOAST_OPTIONS);
     }
   };
 
@@ -82,8 +85,6 @@ const UpdateCourse = () => {
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 mx-36 mt-6">
-      <ToastContainer />
-
       <h2 className="text-2xl font-bold mb-6 text-center">Update Course</h2>
 
       <form onSubmit={handleSubmit}>

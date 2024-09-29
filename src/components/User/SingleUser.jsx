@@ -5,6 +5,8 @@ import { RxCross1 } from "react-icons/rx";
 import { MdEdit, MdDeleteForever } from "react-icons/md";
 import { USER_ROLE, USER_STATUS } from "../../utils/enum";
 import { deleteUserApi, fetchUser } from "../../services/users";
+import { TOAST_OPTIONS } from "../../utils/constants";
+import "react-toastify/dist/ReactToastify.css";
 
 const SingleUser = () => {
   const { userId } = useParams();
@@ -23,7 +25,7 @@ const SingleUser = () => {
         setUser(user);
       } catch (error) {
         console.log(`Error while fetching user`, error);
-        toast.error(`Error while fetching user`);
+        toast.error(`Error while fetching user`, TOAST_OPTIONS);
       }
     };
     fetchUserDetails(userId);
@@ -36,13 +38,13 @@ const SingleUser = () => {
     setIsDeleting(true);
     try {
       await deleteUserApi(user._id);
-      toast.success(`User deleted successfully`);
+      toast.success(`User deleted successfully`, TOAST_OPTIONS);
       navigate(`/users`);
 
       setShowConfirmation(false);
     } catch (error) {
       console.error(`Failed to delete user`, error);
-      toast.error(`Failed to delete user`);
+      toast.error(`Failed to delete user`, TOAST_OPTIONS);
     } finally {
       setIsDeleting(false);
     }

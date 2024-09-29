@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getAllCourses } from "../../services/courses";
 import { createUserApi } from "../../services/users";
+import { TOAST_OPTIONS } from "../../utils/constants";
 
 const CreateUser = () => {
   const [courses, setCourses] = useState([]);
@@ -32,7 +33,7 @@ const CreateUser = () => {
         setCourses(courses);
       } catch (error) {
         console.log(error);
-        toast.error(`Error while fetching courses.`);
+        toast.error(`Error while fetching courses.`, TOAST_OPTIONS);
       }
     };
     fetchCoursesList();
@@ -64,11 +65,11 @@ const CreateUser = () => {
     e.preventDefault();
     try {
       await createUserApi(formData);
-      toast.success(`User Created Successfully!`);
+      toast.success(`User Created Successfully!`, TOAST_OPTIONS);
       navigate(`/users`);
     } catch (err) {
       console.log(err);
-      toast.error(`Error while creating user.`);
+      toast.error(`Error while creating user.`, TOAST_OPTIONS);
     }
   };
 

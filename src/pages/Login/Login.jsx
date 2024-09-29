@@ -6,6 +6,7 @@ import { FaHome } from "react-icons/fa";
 import { USER_ROLE } from "../../utils/enum";
 import { getRoleApi } from "../../services/users";
 import { loginApi } from "../../services/auth";
+import { TOAST_OPTIONS } from "../../utils/constants";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ function Login() {
 
       localStorage.setItem(`user`, JSON.stringify({ isLoggedIn: true, isAdmin: role === USER_ROLE.ADMIN, name }));
 
-      toast.success(`Login successful!`, { autoClose: 2000 });
+      toast.success(`Login successful!`, TOAST_OPTIONS);
 
       navigate(`/`);
 
@@ -34,9 +35,9 @@ function Login() {
       console.log(error);
 
       if (error.response && error.response.status === 401) {
-        toast.error(`Invalid Credentials!`, { autoClose: 3000 });
+        toast.error(`Invalid Credentials!`, TOAST_OPTIONS);
       } else {
-        toast.error(`An error occurred. Please try again later.`);
+        toast.error(`An error occurred. Please try again later.`, TOAST_OPTIONS);
       }
       setLoading(false);
     } finally {
