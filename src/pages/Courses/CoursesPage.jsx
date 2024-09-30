@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import Course from "../../components/Course/Course";
 import { getAllCourses } from "../../services/courses";
 import { getRoleApi } from "../../services/users";
-
 import { USER_ROLE } from "../../utils/enum";
 import { TOAST_OPTIONS } from "../../utils/constants";
 
@@ -16,6 +14,9 @@ function CoursesPage() {
 
   const navigate = useNavigate();
 
+  /**-------------------------------------------------------------------
+                  * Get User's Role and All Courses
+   -------------------------------------------------------------------*/
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -38,6 +39,9 @@ function CoursesPage() {
     fetchData();
   }, []);
 
+  /**-------------------------------------------------------------------
+                                * Loading
+   -------------------------------------------------------------------*/
   if (loading) {
     return (
       <div className="flex justify-center items-center text-2xl font-semibold py-12 body:bg-red-200">

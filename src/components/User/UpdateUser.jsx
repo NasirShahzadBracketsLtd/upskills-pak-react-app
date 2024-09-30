@@ -15,6 +15,9 @@ const UpdateUser = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  /**-------------------------------------------------------------------
+                          * User's Form Data
+   -------------------------------------------------------------------*/
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -27,8 +30,37 @@ const UpdateUser = () => {
     enrolledCourses: [],
   });
 
+  useEffect(() => {
+    const fetchUserAndCourseDetails = async () => {
+      try {
+        const courses = await getAllCourses();
+        setCourses(courses);
+
+        if (userId) {
+          const user = await fetchUser(userId);
+          setUser(user);
+
+          setFormData({
+            firstName: user.firstName || "",
+            lastName: user.lastName || "",
+            email: user.email || "",
+            phoneNumber: user.phoneNumber || "",
+            gender: user.gender || USER_GENDER.MALE,
+            role: user.role || USER_ROLE.STUDENT,
+            status: user.status || USER_STATUS.ACTIVE,
+            enrolledCourses: user.enrolledCourses || [], // Map to course IDs
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUserAndCourseDetails();
+  }, [userId]);
+
   /**-------------------------------------------------------------------
-                        * Get All Courses
+                          * Get All Courses
    -------------------------------------------------------------------*/
   useEffect(() => {
     const fetchCoursesList = async () => {
@@ -43,7 +75,7 @@ const UpdateUser = () => {
   }, []);
 
   /**-------------------------------------------------------------------
-                        * Get User Details
+                          * Get User Details
    -------------------------------------------------------------------*/
   useEffect(() => {
     const fetchUserDetails = async (id) => {
@@ -74,15 +106,14 @@ const UpdateUser = () => {
         gender: user.gender || USER_GENDER.MALE,
         role: user.role || USER_ROLE.STUDENT,
         status: user.status || USER_STATUS.ACTIVE,
-        enrolledCourses: user.enrolledCourses || [], // Map to course IDs
+        enrolledCourses: user.enrolledCourses, // Map to course IDs
       });
     }
   }, [user]);
 
   /**-------------------------------------------------------------------
-                          * Update User
+                            * Update User
    -------------------------------------------------------------------*/
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -90,7 +121,6 @@ const UpdateUser = () => {
       setLoading(true);
       if (user) {
         const _user_id = user?._id;
-
         await updateUserApi(_user_id, formData);
         toast.success(`User Updated Successfully!`, TOAST_OPTIONS);
         navigate(`/users/${_user_id}`);
@@ -130,7 +160,7 @@ const UpdateUser = () => {
       <h2 className="text-2xl font-bold mb-6">{`Update User`}</h2>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {/*----------------------- FirstName --------------------*/}
+          {/*-------------------- FirstName --------------------*/}
           <div className="mb-4">
             <input
               type="text"
@@ -144,7 +174,7 @@ const UpdateUser = () => {
             />
           </div>
 
-          {/*----------------------- LastName --------------------*/}
+          {/*-------------------- LastName --------------------*/}
           <div className="mb-4">
             <input
               type="text"
@@ -158,7 +188,7 @@ const UpdateUser = () => {
             />
           </div>
 
-          {/*----------------------- Email --------------------*/}
+          {/*-------------------- Email --------------------*/}
           <div className="mb-4">
             <input
               type="email"
@@ -172,7 +202,7 @@ const UpdateUser = () => {
             />
           </div>
 
-          {/*----------------------- Email --------------------*/}
+          {/*------------------- Email --------------------*/}
           <div className="mb-4">
             <input
               type="password"
@@ -184,7 +214,8 @@ const UpdateUser = () => {
               aria-label="Email"
             />
           </div>
-          {/*----------------------- Gender --------------------*/}
+
+          {/*-------------------- Gender --------------------*/}
           <div className="mb-4">
             <select
               name="gender"
@@ -200,7 +231,7 @@ const UpdateUser = () => {
             </select>
           </div>
 
-          {/*----------------------- PhoneNumber --------------------*/}
+          {/*-------------------- Phone Number --------------------*/}
           <div className="mb-4">
             <input
               type="text"
@@ -214,7 +245,7 @@ const UpdateUser = () => {
             />
           </div>
 
-          {/*----------------------- Role --------------------*/}
+          {/*-------------------- Role --------------------*/}
           <div className="mb-4">
             <select
               name="role"
@@ -229,7 +260,7 @@ const UpdateUser = () => {
             </select>
           </div>
 
-          {/*----------------------- Status --------------------*/}
+          {/*-------------------- Status --------------------*/}
           <div className="mb-4">
             <select
               name="status"
@@ -244,15 +275,12 @@ const UpdateUser = () => {
             </select>
           </div>
 
-          {/*----------------------- Enrolled Courses --------------------*/}
+          {/*-------------------- Enrolled Courses --------------------*/}
           <div className="mb-4 col-span-2">
             <Select
               isMulti
               name="courses"
-              options={courses.map((course) => ({
-                value: course._id,
-                label: course.title,
-              }))}
+              options={courses.map((course) => ({ value: course._id, label: course.title }))}
               value={courses
                 .filter((course) => formData.enrolledCourses.includes(course._id)) // Show preselected courses
                 .map((course) => ({ value: course._id, label: course.title }))}
@@ -265,6 +293,7 @@ const UpdateUser = () => {
           </div>
         </div>
 
+        {/*-------------------- Buttons (Cancel, Update) --------------------*/}
         <div className="flex justify-end mt-6">
           <button
             type="button"

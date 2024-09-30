@@ -22,6 +22,7 @@ const SingleUser = () => {
     const fetchUserDetails = async (id) => {
       try {
         const user = await fetchUser(id);
+        console.log("---------------------", user);
         setUser(user);
       } catch (error) {
         console.log(`Error while fetching user`, error);
@@ -123,7 +124,7 @@ const SingleUser = () => {
                       key={index}
                       className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-lg font-bold"
                     >
-                      {course}
+                      {course.title}
                     </span>
                   ))
                 ) : (
