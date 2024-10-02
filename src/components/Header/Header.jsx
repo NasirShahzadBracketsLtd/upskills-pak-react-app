@@ -25,16 +25,16 @@ const Header = ({ isLoggedIn, isAdmin, name }) => {
 
   return (
     <header className="bg-blue-900 h-[6rem] text-white w-full fixed top-0 shadow-md z-10 ">
-      <nav className="flex items-center justify-between px-24 h-full">
+      <nav className="flex items-center justify-between px-8 md:px-24 h-full">
         {/** ---------------------- Logo ---------------------- */}
         <section className="w-1/5 flex justify-start">
           <Link to="/">
-            <img className="w-18 h-24 p-4 rounded-full " src="/logo.JPG" alt="Website Logo" />
+            <img className="lg:w-18 lg:h-24 lg:p-4" src="/logo1.png" alt="Website Logo" />
           </Link>
         </section>
 
-        <ul className="flex gap-8 w-3/5">
-          <li className="text-xl font-semibold">
+        <ul className="flex gap-2 sm:gap-4 md:gap-8 w-3/5 pl-4">
+          <li className="text-sm md:text-xl font-semibold">
             <Link to="/" className="hover:font-semibold hover:text-gray-400 ">
               Home
             </Link>
@@ -42,12 +42,12 @@ const Header = ({ isLoggedIn, isAdmin, name }) => {
 
           {!isLoggedIn && (
             <>
-              <li className="text-xl font-semibold">
+              <li className="text-sm md:text-xl font-semibold">
                 <a href="#courses" className="hover:font-semibold hover:text-gray-400">
                   Courses
                 </a>
               </li>
-              <li className="text-xl font-semibold">
+              <li className="text-sm md:text-xl font-semibold">
                 <a href="#services" className="hover:font-semibold hover:text-gray-400">
                   Services
                 </a>
@@ -56,12 +56,12 @@ const Header = ({ isLoggedIn, isAdmin, name }) => {
           )}
           {isLoggedIn && isAdmin && (
             <>
-              <li className="text-xl font-semibold">
+              <li className="text-sm md:text-xl font-semibold">
                 <Link to="/users" className="hover:font-semibold hover:text-gray-400">
                   User
                 </Link>
               </li>
-              <li className="text-xl font-semibold">
+              <li className="text-sm md:text-xl font-semibold">
                 <a href="/courses" className="hover:font-semibold hover:text-gray-400">
                   Courses
                 </a>
@@ -70,7 +70,7 @@ const Header = ({ isLoggedIn, isAdmin, name }) => {
           )}
 
           {isLoggedIn && !isAdmin && (
-            <li className="text-xl font-semibold">
+            <li className="text-sm md:text-xl font-semibold">
               <Link to="/courses" className="hover:font-semibold hover:text-gray-400">
                 My Learnings
               </Link>
@@ -82,15 +82,15 @@ const Header = ({ isLoggedIn, isAdmin, name }) => {
         <section className="w-1/5 flex justify-end gap-4">
           {/** ---------------------- Logged-In User Name ---------------------- */}
           {name && (
-            <div className="flex gap-1 items-center">
-              <HiUser className="size-5 font-bold " />
-              <h1 className="text-xl inline-block truncate max-w-xs">{name}</h1>
+            <div className="hidden md:flex md:gap-1 items-center ">
+              <HiUser className="size-4 md:size-6 lg:size-8 font-bold " />
+              <h1 className="text-sm md:text-xl inline-block truncate max-w-xs">{name}</h1>
             </div>
           )}
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="px-4 py-2 flex items-center justify-center border w-[7rem] text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
+              className="px-4 py-2 flex items-center justify-center border w-[7rem] text-md md:text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
             >
               {loading ? (
                 <>
@@ -118,7 +118,7 @@ const Header = ({ isLoggedIn, isAdmin, name }) => {
           ) : (
             <Link
               to="/login"
-              className="px-4 py-2 flex items-center justify-center border w-[7rem] text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
+              className="px-4 py-2 flex items-center justify-center border md:w-[7rem] text-md md:text-xl bg-orange-500 border-none text-white rounded-full hover:bg-orange-700"
             >
               Login
             </Link>

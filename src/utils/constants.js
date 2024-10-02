@@ -1,4 +1,5 @@
-export const API_BASE_URL = "http://3.110.175.159";
+export const API_BASE_URL = "https://api.upskillspakistan.com";
+// export const API_BASE_URL = "http://3.110.175.159";
 // export const API_BASE_URL = `http://localhost:3011`;
 
 export const TOKEN = `token`;

@@ -106,7 +106,8 @@ const UpdateUser = () => {
         gender: user.gender || USER_GENDER.MALE,
         role: user.role || USER_ROLE.STUDENT,
         status: user.status || USER_STATUS.ACTIVE,
-        enrolledCourses: user.enrolledCourses, // Map to course IDs
+        // enrolledCourses: user.enrolledCourses || [], // Map to course IDs
+        enrolledCourses: user.enrolledCourses.map((course) => course._id) || [],
       });
     }
   }, [user]);

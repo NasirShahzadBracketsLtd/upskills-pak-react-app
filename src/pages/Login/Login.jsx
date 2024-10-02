@@ -46,7 +46,7 @@ function Login() {
   };
 
   return (
-    <div className="py-12 h-screen flex justify-center items-center bg-blue-900">
+    <div className="py-12 h-screen flex justify-center items-center bg-zinc-100 md:bg-blue-900">
       <form onSubmit={handleLogin}>
         <div className="w-96 p-5 flex flex-col gap-2 h-full bg-zinc-100 rounded-xl text-center items-center py-12">
           <h1 className="text-lg font-bold text-blue-600">Welcome to</h1>

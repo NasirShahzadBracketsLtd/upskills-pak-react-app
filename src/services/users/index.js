@@ -30,8 +30,9 @@ export const deleteUserApi = async (id) => {
 };
 
 export const updateUserApi = async (_user_id, formData) => {
+  console.log(formData, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22222");
   const response = await api.patch(`${API_BASE_URL}/users/${_user_id}`, formData, headers);
-
+  console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrr", response);
   if (response.status === 200) {
     return response.data;
   }
